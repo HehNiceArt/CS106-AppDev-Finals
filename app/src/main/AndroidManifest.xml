@@ -13,6 +13,12 @@
         android:theme="@style/Theme.NyaNyanko"
         tools:targetApi="31">
         <activity
+            android:name=".Gameplay"
+            android:exported="false" />
+        <activity
+            android:name=".Splash"
+            android:exported="false" />
+        <activity
             android:name=".Registration"
             android:exported="false" />
         <activity
