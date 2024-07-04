@@ -11,11 +11,13 @@ public class Gameplay extends AppCompatActivity {
     private GameView gameView;
     private Button toyBTN, shopBTN, inventoryBTN, menuBTN;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        uiButtons();
+    }
+    public void uiButtons()
+    {
         RelativeLayout relativeLayout = new RelativeLayout(this);
         gameView = new GameView(this);
 
@@ -48,7 +50,7 @@ public class Gameplay extends AppCompatActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
         menuParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-            menuParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        menuParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         menuBTN.setLayoutParams(menuParams);
 
         RelativeLayout.LayoutParams shopParams = new RelativeLayout.LayoutParams(
@@ -76,32 +78,10 @@ public class Gameplay extends AppCompatActivity {
 
         setContentView(relativeLayout);
 
-        toyBTN.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view)
-            {
-                gameView.handleToyBTNClick();
-            }
-        });
-        menuBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gameView.handleMenuBTNClick();
-            }
-        });
-        shopBTN.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view) {
-               gameView.handleShopBTNClick();
-            }
-        });
-        inventoryBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gameView.handleInventoryBTNClick();
-            }
-        });
+        toyBTN.setOnClickListener(view -> gameView.handleToyBTNClick());
+        menuBTN.setOnClickListener(view -> gameView.handleMenuBTNClick());
+        shopBTN.setOnClickListener(view -> gameView.handleShopBTNClick());
+        inventoryBTN.setOnClickListener(view -> gameView.handleInventoryBTNClick());
     }
     @Override
     protected void onResume()

@@ -7,12 +7,15 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 
 public class GameView extends SurfaceView implements Runnable {
 
+    private static final String TAG = "GameView";
+    private NyankoAI nyanko;
     private Thread gameThread = null;
     private boolean isPlaying;
     private SurfaceHolder surfaceHolder;
@@ -23,12 +26,26 @@ public class GameView extends SurfaceView implements Runnable {
     private int screenWidth;
     private int screenHeight;
 
+    public int initialX, initialY;
     private int hp = 10;
     private int hunger = 10;
     private String mood = "Good";
     public GameView(Context context){
         super(context);
         surfaceHolder = getHolder();
+        Bitmap nyankoBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.nyanko);
+
+        if(nyankoBitmap != null){
+             initialX = screenWidth;
+             initialY = screenHeight;
+            nyanko = new NyankoAI(nyankoBitmap, initialX, initialY, 0.6f);
+        } else {
+            Log.e(TAG, "Failed to load nyankoBitmap");
+        }
+    }
+
+    public void backgroundUI()
+    {
         paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setTextSize(50);
@@ -45,8 +62,8 @@ public class GameView extends SurfaceView implements Runnable {
         screenWidth = getResources().getDisplayMetrics().widthPixels;
         screenHeight = getResources().getDisplayMetrics().heightPixels;
         background = Bitmap.createScaledBitmap(background, screenWidth, screenHeight, false);
-    }
 
+    }
     @Override
     public void run()
     {
@@ -54,12 +71,21 @@ public class GameView extends SurfaceView implements Runnable {
         {
             update();
             draw();
+            backgroundUI();
             control();
         }
     }
     public void update()
     {
-
+        if(nyanko != null){
+            nyanko.update(screenWidth, screenHeight);
+            if (nyanko.getX() < 0 || nyanko.getX() + nyanko.getWidth() > screenWidth
+                    || nyanko.getY() < 0 || nyanko.getY() + nyanko.getHeight() > screenHeight) {
+                nyanko.setSpeed(-nyanko.getSpeedX(), -nyanko.getSpeedY());
+            }
+        }else {
+            Log.e(TAG, "NyankoAI is null in update()!");
+        }
     }
     public void draw()
     {
@@ -68,15 +94,14 @@ public class GameView extends SurfaceView implements Runnable {
             Canvas canvas = surfaceHolder.lockCanvas();
             canvas.drawBitmap(background, 0, 0, paint);
             stats(canvas);
+            float scale = 0.5f;
+            if(nyanko != null){
+                nyanko.draw(canvas, scale);
+            }else {
+                Log.e(TAG, "NyankoAI is null in draw()");
+            }
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
-    }
-    public void NyankoAI(Canvas canvas)
-    {
-        //TODO Add Nyanko AI
-        //Walk around the playing area
-        //Idle mode, sitting or napping
-        //Playful mode
     }
     public void stats(Canvas canvas)
     {
