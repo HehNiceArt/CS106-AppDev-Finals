@@ -1,6 +1,5 @@
 package com.example.nyanyanko;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,8 +7,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Bundle;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -23,6 +20,8 @@ public class GameView extends SurfaceView implements Runnable {
     private  Paint paint;
     private Paint backgroundPaint;
     private Paint borderPaint;
+    private int screenWidth;
+    private int screenHeight;
 
     private int hp = 10;
     private int hunger = 10;
@@ -42,7 +41,10 @@ public class GameView extends SurfaceView implements Runnable {
         borderPaint.setStyle(Paint.Style.STROKE);
         borderPaint.setStrokeWidth(5);
 
-        background = BitmapFactory.decodeResource(getResources(), R.drawable.bg);
+        background = BitmapFactory.decodeResource(getResources(), R.drawable.gameviewbg);
+        screenWidth = getResources().getDisplayMetrics().widthPixels;
+        screenHeight = getResources().getDisplayMetrics().heightPixels;
+        background = Bitmap.createScaledBitmap(background, screenWidth, screenHeight, false);
     }
 
     @Override
@@ -66,9 +68,15 @@ public class GameView extends SurfaceView implements Runnable {
             Canvas canvas = surfaceHolder.lockCanvas();
             canvas.drawBitmap(background, 0, 0, paint);
             stats(canvas);
-            uiButtons(canvas);
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
+    }
+    public void NyankoAI(Canvas canvas)
+    {
+        //TODO Add Nyanko AI
+        //Walk around the playing area
+        //Idle mode, sitting or napping
+        //Playful mode
     }
     public void stats(Canvas canvas)
     {
@@ -84,15 +92,6 @@ public class GameView extends SurfaceView implements Runnable {
         canvas.drawText("Hunger: " + hunger + "/10", left + 20, top + 110, paint);
         canvas.drawText("Mood: " + mood,left + 20, top+ 170, paint);
 
-    }
-    public void uiButtons(Canvas canvas)
-    {
-        int left = 600;
-        int top = 50;
-        int right = 1010;
-        int bottom = 250;
-        canvas.drawRect(left, top,right, bottom, backgroundPaint);
-        canvas.drawRect(left, top,right, bottom, borderPaint);
     }
     private void control()
     {
@@ -119,5 +118,21 @@ public class GameView extends SurfaceView implements Runnable {
         {
             e.printStackTrace();
         }
+    }
+
+    public void handleShopBTNClick()
+    {
+        hp = Math.max(0, hp - 1);
+    }
+    public void handleToyBTNClick()
+    {
+        hunger = Math.max(0, hunger -1);
+    }
+    public void handleInventoryBTNClick()
+    {
+    }
+    public void handleMenuBTNClick()
+    {
+
     }
 }
