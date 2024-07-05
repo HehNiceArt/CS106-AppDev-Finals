@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 
@@ -45,6 +46,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
     public void surfaceCreated(SurfaceHolder holder){
         init();
         resume();
+        buttonList();
     }
     private void init(){
         screenWidth = getWidth();
@@ -62,6 +64,12 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
         }else{
             Log.e(TAG, "cat is null!");
         }
+    }
+    private void buttonList(){
+        Button toyBTN = (Button) findViewById(R.id.toyBTN);
+        Button menuBTN = (Button) findViewById(R.id.menuBTN);
+        Button shopBTN = (Button) findViewById(R.id.shopBTN);
+        Button inventoryBTN = (Button) findViewById(R.id.inventoryBTN);
     }
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
@@ -121,12 +129,23 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
                 canvas.drawBitmap(background, 0, 0, null);
             if(nyankoAI != null){
                 nyankoAI.draw(canvas);
+                displayText(canvas);
                 canvas.drawCircle(screenWidth / 2, screenHeight / 2, 50, new Paint());
             }else {
                 Log.e(TAG, "NyankoAI is null in draw()");
             }
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
+    }
+    public void displayText(Canvas canvas){
+        NyankoAI.Mood initialMood = nyankoAI.getMood();
+
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(50);
+        canvas.drawText("HP: " + nyankoAI.getHP() +"/10", 20, 100, paint);
+        canvas.drawText("Hunger: " + nyankoAI.getHunger() +"/10", 20, 150, paint);
+        canvas.drawText("Mood: " + initialMood.getMoodString(),20, 200, paint);
     }
     private void control() {
         try{
@@ -149,19 +168,5 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
         catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    public void handleShopBTNClick()
-    {
-    }
-    public void handleToyBTNClick()
-    {
-    }
-    public void handleInventoryBTNClick()
-    {
-    }
-    public void handleMenuBTNClick()
-    {
-
     }
 }

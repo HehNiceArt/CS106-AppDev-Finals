@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
-
+<!--
             <TableLayout
                 android:layout_width="wrap_content"
                 android:layout_margin="20dp"
@@ -29,14 +29,17 @@
                         android:id="@+id/textView5"
                         android:layout_width="wrap_content"
                         android:textStyle="bold"
+                        android:textSize="24sp"
                         android:layout_height="wrap_content"
                         android:text="HP: " />
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/hpTXT"
                         android:layout_width="wrap_content"
+                        android:textSize="24sp"
+                        android:layout_gravity="end"
                         android:layout_height="wrap_content"
-                        android:text="10/10" />
+                        android:text="" />
                 </TableRow>
 
                 <TableRow
@@ -46,15 +49,18 @@
                     <TextView
                         android:id="@+id/textView3"
                         android:layout_width="wrap_content"
+                        android:textSize="24sp"
                         android:textStyle="bold"
                         android:layout_height="wrap_content"
                         android:text="Hunger: " />
 
                     <TextView
-                        android:id="@+id/textView6"
+                        android:id="@+id/hungerTXT"
                         android:layout_width="wrap_content"
+                        android:layout_gravity="end"
+                        android:textSize="24sp"
                         android:layout_height="wrap_content"
-                        android:text="10/10" />
+                        android:text="" />
                 </TableRow>
 
                 <TableRow
@@ -65,18 +71,21 @@
                         android:id="@+id/textView4"
                         android:layout_width="wrap_content"
                         android:textStyle="bold"
+                        android:textSize="24sp"
                         android:layout_height="wrap_content"
                         android:text="Mood: " />
 
                     <TextView
-                        android:id="@+id/textView7"
+                        android:id="@+id/moodTXT"
                         android:layout_width="wrap_content"
+                        android:layout_gravity="end"
+                        android:textSize="24sp"
                         android:layout_height="wrap_content"
                         android:text="Good" />
                 </TableRow>
 
             </TableLayout>
-
+-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_margin="20dp"
@@ -93,11 +102,13 @@
                         android:id="@+id/toyBTN"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:onClick="handleToysBTNClick"
                         android:text="Toys" />
 
                     <Button
                         android:id="@+id/menuBTN"
                         android:layout_width="wrap_content"
+                        android:onClick="handleMenuBTNClick"
                         android:layout_height="wrap_content"
                         android:text="Menu" />
                 </LinearLayout>
@@ -105,12 +116,14 @@
                 <Button
                     android:id="@+id/shopBTN"
                     android:layout_width="wrap_content"
+                    android:onClick="handleShopBTNClick"
                     android:layout_height="wrap_content"
                     android:text="Shop" />
 
                 <Button
-                    android:id="@+id/Inventory"
+                    android:id="@+id/inventoryBTN"
                     android:layout_width="wrap_content"
+                    android:onClick="handleInventoryBTNClick"
                     android:layout_height="wrap_content"
                     android:text="Inventory" />
 

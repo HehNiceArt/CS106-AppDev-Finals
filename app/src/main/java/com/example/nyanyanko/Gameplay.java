@@ -3,6 +3,7 @@ package com.example.nyanyanko;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ public class Gameplay extends AppCompatActivity {
 
         FrameLayout frameLayout = findViewById(R.id.act_gameplay);
         gameView = new GameView(this);
+
         frameLayout.addView(gameView, 0);
     }
     @Override
@@ -31,5 +33,13 @@ public class Gameplay extends AppCompatActivity {
     protected void onPause(){
         super.onPause();
         gameView.pause();
+    }
+    public void handleShopBTNClick(View view) {
+    }
+    public void handleInventoryBTNClick(View view) {
+    }
+    public void handleMenuBTNClick(View view) {
+    }
+    public void handleToysBTNClick(View view) {
     }
 }

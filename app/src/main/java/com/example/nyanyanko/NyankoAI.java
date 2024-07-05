@@ -3,16 +3,13 @@ package com.example.nyanyanko;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.text.PrecomputedText;
-import android.util.DisplayMetrics;
 import android.util.Log;
 
 import java.util.Random;
-import java.util.logging.Handler;
 
 public class NyankoAI {
+    private Gameplay gameplay;
     private Bitmap bitmap;
     private int x,y;
     private float speedX, speedY;
@@ -22,6 +19,8 @@ public class NyankoAI {
     String TAG = "NyankoAI";
 
     private long lastStateChangeTime;
+    private long hpTime;
+    private long hungerTime;
     private final long WALKING_DURATION = 4000;
     private final long IDLE_DURATION = 7000;
     private long statePauseTime;
@@ -37,6 +36,23 @@ public class NyankoAI {
     private State currentState;
     private State previousState;
 
+    public int hunger = 10;
+    public int hp = 10;
+    public enum Mood{
+        DEFAULT("GOOD"),
+        SAD("SAD"),
+        ANGRY("ANGRY");
+        private final String moodString;
+
+        Mood(String moodString) {
+            this.moodString = moodString;
+        }
+
+        public String getMoodString() {
+            return moodString;
+        }
+    }
+    private Mood currentMood = Mood.DEFAULT;
     public NyankoAI(Bitmap bitmap, int screenWidth, int screenHeight, float scale)
    {
       this.bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
@@ -54,6 +70,9 @@ public class NyankoAI {
       this.currentState = State.WALKING;
       this.lastStateChangeTime = System.currentTimeMillis();
       this.isStatePaused = false;
+
+      this.hpTime = System.currentTimeMillis();
+      this.hungerTime = System.currentTimeMillis();
    }
 
    public void update(){
@@ -68,7 +87,46 @@ public class NyankoAI {
         } else if (currentState == State.PLAYFUL) {
            moveToTarget();
         }
+
+        decreaseHunger(currentTime);
+        checkHealth();
+        checkMood(currentTime);
    }
+   private void decreaseHunger(long currentTime){
+        if(currentTime - hungerTime> 1000){
+            hunger--;
+            if(hunger >= 0){
+                hungerTime= currentTime;
+            }else{
+                hunger = 0;
+            }
+        }
+   }
+    private void decreaseHP(long currentTime){
+        if(currentTime - hpTime> 1000){
+            hp--;
+            if(hp>= 0){
+                hpTime= currentTime;
+            }else{
+                hp = 0;
+            }
+        }
+    }
+   private void checkHealth(){
+        if(hp <= 0){
+            //have a pop up and say game over
+        }
+   }
+   private void checkMood(long currentTIme){
+        if(hunger <= 5 && hunger >= 3){
+            decreaseHP(currentTIme);
+            setMood(Mood.SAD);
+        } else if (hunger <= 3 && hunger >= 0 ){
+            decreaseHP(currentTIme);
+           setMood(Mood.ANGRY);
+        }
+   }
+
     private void switchState(){
         if(currentState == State.WALKING){
             currentState = State.IDLE;
@@ -143,5 +201,18 @@ public class NyankoAI {
    public void draw(Canvas canvas){
            canvas.drawBitmap(bitmap, x, y,new Paint());
    }
+
+   public int getHunger(){
+        return hunger;
+   }
+   public int getHP(){
+        return hp;
+   }
+   public Mood getMood(){
+        return currentMood;
+   }
+    public void setMood(Mood mood) {
+        this.currentMood = mood;
+    }
 }
 
