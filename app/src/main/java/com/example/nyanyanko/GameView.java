@@ -13,6 +13,9 @@ import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
 
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
+
 
 public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Callback {
 
@@ -26,9 +29,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
     private int screenHeight;
 
     public int initialX, initialY;
-    private int hp = 10;
-    private int hunger = 10;
-    private String mood = "Good";
+
     public GameView(Context context){
         super(context);
         surfaceHolder = getHolder();
@@ -130,11 +131,9 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
 
     public void handleShopBTNClick()
     {
-        hp = Math.max(0, hp - 1);
     }
     public void handleToyBTNClick()
     {
-        hunger = Math.max(0, hunger -1);
     }
     public void handleInventoryBTNClick()
     {

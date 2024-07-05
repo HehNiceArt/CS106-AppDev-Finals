@@ -4,6 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+
+import android.os.Handler;
+import java.util.logging.LogRecord;
 
 public class Gameplay extends AppCompatActivity {
     private GameView gameView;
@@ -22,5 +26,10 @@ public class Gameplay extends AppCompatActivity {
     {
         super.onResume();
         gameView.resume();
+    }
+    @Override
+    protected void onPause(){
+        super.onPause();
+        gameView.pause();
     }
 }

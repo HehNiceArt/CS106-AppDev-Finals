@@ -10,16 +10,28 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import java.util.Random;
+import java.util.logging.Handler;
 
 public class NyankoAI {
-    private long lastMoveTime;
     private Bitmap bitmap;
     private int x,y;
     private float speedX, speedY;
     private int screenWidth, screenHeight;
     private Random random;
-    private final float DEFAULT_SPEED = 10.0f;
+    private final float DEFAULT_SPEED = 3.0f;
     String TAG = "NyankoAI";
+
+    private final long STATE_DURATION = 5000;
+    private long lastStateChangeTime;
+    private final long WALKING_DURATION = 4000;
+    private final long IDLE_DURATION = 7000;
+
+    private enum State{
+        WALKING,
+        IDLE
+    }
+    private State currentState;
+
     public NyankoAI(Bitmap bitmap, int screenWidth, int screenHeight, float scale)
    {
       this.bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
@@ -34,24 +46,48 @@ public class NyankoAI {
 
       this.random = new Random();
 
+      this.currentState = State.WALKING;
+      this.lastStateChangeTime = System.currentTimeMillis();
    }
+
    public void update(){
+        long currentTime = System.currentTimeMillis();
+        long stateDuration = (currentState == State.WALKING) ? WALKING_DURATION : IDLE_DURATION;
+        if(currentTime - lastStateChangeTime > stateDuration){
+            switchState();
+            lastStateChangeTime = currentTime;
+        }
+        if(currentState == State.WALKING){
+            walking();
+        }
+   }
+    private void switchState(){
+        if(currentState == State.WALKING){
+            currentState = State.IDLE;
+        }else{
+            currentState = State.WALKING;
+            changeWalkingDirection();
+        }
+    }
+    private void changeWalkingDirection(){
+        double angle = random.nextDouble() * 2 * Math.PI;
+        speedX = (float) (DEFAULT_SPEED* Math.cos(angle));
+        speedY = (float) (DEFAULT_SPEED* Math.sin(angle));
+    }
+
+   public void walking(){
        x += speedX;
        y += speedY;
 
-       //if(x <= 0 || x + bitmap.getWidth() >= screenWidth || y <= 0 || y + bitmap.getHeight() >= screenHeight) {
-           //Randomize new movement angle
-          // double angle = random.nextDouble() * 2 * Math.PI; // Random angle in radians
-           //speedX = (float) (DEFAULT_SPEED * Math.cos(angle));
-           //speedY = (float) (DEFAULT_SPEED * Math.sin(angle));
-       //}
-       double angle = random.nextDouble() * 2 * Math.PI;
        if(x <= 0 || x + bitmap.getWidth() >= screenWidth){
-           speedX = (float) (DEFAULT_SPEED* Math.cos(angle));
+           speedX = -speedX;
        }
        if(y <= 0 || y + bitmap.getHeight()>= screenHeight){
-           speedY = (float) (DEFAULT_SPEED* Math.sin(angle));
+           speedY = -speedY;
        }
+   }
+   public void idle(){
+        //do nothing
    }
    public void draw(Canvas canvas){
            canvas.drawBitmap(bitmap, x, y,new Paint());
