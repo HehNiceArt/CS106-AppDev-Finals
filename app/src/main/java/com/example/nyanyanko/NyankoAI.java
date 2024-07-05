@@ -21,16 +21,21 @@ public class NyankoAI {
     private final float DEFAULT_SPEED = 3.0f;
     String TAG = "NyankoAI";
 
-    private final long STATE_DURATION = 5000;
     private long lastStateChangeTime;
     private final long WALKING_DURATION = 4000;
     private final long IDLE_DURATION = 7000;
+    private long statePauseTime;
+    private boolean isStatePaused;
+
+    private int targetX, targetY;
 
     private enum State{
         WALKING,
-        IDLE
+        IDLE,
+        PLAYFUL
     }
     private State currentState;
+    private State previousState;
 
     public NyankoAI(Bitmap bitmap, int screenWidth, int screenHeight, float scale)
    {
@@ -48,6 +53,7 @@ public class NyankoAI {
 
       this.currentState = State.WALKING;
       this.lastStateChangeTime = System.currentTimeMillis();
+      this.isStatePaused = false;
    }
 
    public void update(){
@@ -59,14 +65,21 @@ public class NyankoAI {
         }
         if(currentState == State.WALKING){
             walking();
+        } else if (currentState == State.PLAYFUL) {
+           moveToTarget();
         }
    }
     private void switchState(){
         if(currentState == State.WALKING){
             currentState = State.IDLE;
-        }else{
+        }else if (currentState == State.IDLE){
             currentState = State.WALKING;
             changeWalkingDirection();
+        } else if (currentState == State.PLAYFUL) {
+            currentState = previousState == State.IDLE ? State.PLAYFUL : State.WALKING;
+            if(currentState == State.WALKING){
+                changeWalkingDirection();
+            }
         }
     }
     private void changeWalkingDirection(){
@@ -86,33 +99,49 @@ public class NyankoAI {
            speedY = -speedY;
        }
    }
-   public void idle(){
-        //do nothing
+   private void moveToTarget(){
+       float deltaX = targetX - x;
+       float deltaY = targetY - y;
+       double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+       Log.e(TAG, "Dist" + distance);
+
+       if(distance > DEFAULT_SPEED){
+           speedX = (float) (DEFAULT_SPEED * (deltaX / distance));
+           speedY = (float) (DEFAULT_SPEED * (deltaY / distance));
+           x += speedX;
+           y += speedY;
+       }else {
+           x = targetX;
+           y = targetY;
+
+           isStatePaused = false;
+           lastStateChangeTime = System.currentTimeMillis();
+           currentState = State.IDLE;
+       }
    }
+   public boolean isTouched(int touchX, int touchY){
+       return touchX >= x && touchX <= (x + bitmap.getWidth()) && touchY >= y && touchY <= (y + bitmap.getHeight());
+   }
+    public void lastPoint(int touchX, int touchY){
+        targetX = touchX;
+        targetY = touchY;
+    }
+
+    public void onTouch(){
+        if (currentState != State.PLAYFUL) {
+            previousState = currentState;
+            currentState = State.PLAYFUL;
+            isStatePaused = true;
+            statePauseTime = System.currentTimeMillis();
+        } else {
+            currentState = previousState;
+            isStatePaused = false;
+            lastStateChangeTime = System.currentTimeMillis() - (statePauseTime - lastStateChangeTime); // Adjust state change time
+        }
+    }
    public void draw(Canvas canvas){
            canvas.drawBitmap(bitmap, x, y,new Paint());
    }
-   public void setSpeed(float speedX, float speedY){
-       this.speedX = speedX;
-       this.speedY = speedY;
-   }
-   public int getX(){
-       return x;
-   }
-   public int getY(){
-       return y;
-   }
-    public int getWidth() {
-        return bitmap.getWidth();
-    }
-    public int getHeight(){
-        return bitmap.getHeight();
-    }
-    public float getSpeedX(){
-        return speedX;
-    }
-    public float getSpeedY(){
-       return speedY;
-    }
 }
 

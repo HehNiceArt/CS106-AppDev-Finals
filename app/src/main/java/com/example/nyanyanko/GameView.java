@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -36,10 +37,16 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
 
         surfaceCreated(surfaceHolder);
         surfaceHolder.addCallback(this);
+
+        setFocusable(true);
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder){
+        init();
+        resume();
+    }
+    private void init(){
         screenWidth = getWidth();
         screenHeight = getHeight();
 
@@ -55,9 +62,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
         }else{
             Log.e(TAG, "cat is null!");
         }
-        resume();
     }
-
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
 
@@ -65,9 +70,31 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
 
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
-
+        boolean retry = true;
+        while (retry) {
+            try {
+                isPlaying = false;
+                gameThread.join();
+                retry = false;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int touchX = (int) event.getX();
+        int touchY = (int) event.getY();
+        nyankoAI.lastPoint(touchX, touchY);
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (nyankoAI != null && nyankoAI.isTouched((int) event.getX(), (int) event.getY())) {
+                nyankoAI.onTouch();
+            }
+        }
+        Log.e(TAG, "Touch: " + touchX + " " + touchY);
+        return true;
+    }
     @Override
     public void run()
     {
@@ -86,8 +113,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
             Log.e(TAG, "NyankoAI is null in update()!");
         }
     }
-    public void draw()
-    {
+    public void draw() {
         if(surfaceHolder.getSurface().isValid())
         {
             Canvas canvas = surfaceHolder.lockCanvas();
@@ -102,8 +128,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
     }
-    private void control()
-    {
+    private void control() {
         try{
             Thread.sleep(17);
         }
@@ -111,20 +136,17 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
             e.printStackTrace();
         }
     }
-    public void resume()
-    {
+    public void resume() {
         isPlaying = true;
         gameThread = new Thread(this);
         gameThread.start();
     }
-    public void pause()
-    {
+    public void pause() {
         isPlaying = false;
         try{
             gameThread.join();
         }
-        catch (InterruptedException e)
-        {
+        catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
