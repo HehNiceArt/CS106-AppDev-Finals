@@ -3,8 +3,10 @@ package com.example.nyanyanko;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.widget.FrameLayout;
 
 public class Gameplay extends AppCompatActivity {
+    private GameView gameView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
