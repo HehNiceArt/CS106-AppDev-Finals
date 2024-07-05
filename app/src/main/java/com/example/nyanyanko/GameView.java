@@ -11,18 +11,17 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import androidx.annotation.NonNull;
 
-public class GameView extends SurfaceView implements Runnable {
+
+public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Callback {
 
     private static final String TAG = "GameView";
-    private NyankoAI nyanko;
+    private NyankoAI nyankoAI;
     private Thread gameThread = null;
     private boolean isPlaying;
     private SurfaceHolder surfaceHolder;
     private Bitmap background;
-    private  Paint paint;
-    private Paint backgroundPaint;
-    private Paint borderPaint;
     private int screenWidth;
     private int screenHeight;
 
@@ -33,37 +32,41 @@ public class GameView extends SurfaceView implements Runnable {
     public GameView(Context context){
         super(context);
         surfaceHolder = getHolder();
+
+        surfaceCreated(surfaceHolder);
+        surfaceHolder.addCallback(this);
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder){
+        screenWidth = getWidth();
+        screenHeight = getHeight();
+
         Bitmap nyankoBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.nyanko);
+        background = BitmapFactory.decodeResource(getResources(), R.drawable.gameviewbg);
 
         if(nyankoBitmap != null){
-             initialX = screenWidth;
-             initialY = screenHeight;
-            nyanko = new NyankoAI(nyankoBitmap, initialX, initialY, 0.6f);
-        } else {
-            Log.e(TAG, "Failed to load nyankoBitmap");
+            Bitmap resized = Bitmap.createScaledBitmap(nyankoBitmap, 240, 240, false);
+            initialX = (screenWidth - nyankoBitmap.getWidth()) / 2;
+            initialY = (screenHeight - nyankoBitmap.getHeight()) / 2;
+            nyankoAI = new NyankoAI(resized, initialX, initialY,  0.6f);
+            Log.d(TAG, "cat spawning");
+        }else{
+            Log.e(TAG, "cat is null!");
         }
+        resume();
     }
 
-    public void backgroundUI()
-    {
-        paint = new Paint();
-        paint.setColor(Color.BLACK);
-        paint.setTextSize(50);
-
-        backgroundPaint = new Paint();
-        backgroundPaint.setColor(Color.WHITE);
-
-        borderPaint = new Paint();
-        borderPaint.setColor(Color.BLACK);
-        borderPaint.setStyle(Paint.Style.STROKE);
-        borderPaint.setStrokeWidth(5);
-
-        background = BitmapFactory.decodeResource(getResources(), R.drawable.gameviewbg);
-        screenWidth = getResources().getDisplayMetrics().widthPixels;
-        screenHeight = getResources().getDisplayMetrics().heightPixels;
-        background = Bitmap.createScaledBitmap(background, screenWidth, screenHeight, false);
+    @Override
+    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
 
     }
+
+    @Override
+    public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
+
+    }
+
     @Override
     public void run()
     {
@@ -71,18 +74,13 @@ public class GameView extends SurfaceView implements Runnable {
         {
             update();
             draw();
-            backgroundUI();
             control();
         }
     }
     public void update()
     {
-        if(nyanko != null){
-            nyanko.update(screenWidth, screenHeight);
-            if (nyanko.getX() < 0 || nyanko.getX() + nyanko.getWidth() > screenWidth
-                    || nyanko.getY() < 0 || nyanko.getY() + nyanko.getHeight() > screenHeight) {
-                nyanko.setSpeed(-nyanko.getSpeedX(), -nyanko.getSpeedY());
-            }
+        if(nyankoAI != null){
+            nyankoAI.update();
         }else {
             Log.e(TAG, "NyankoAI is null in update()!");
         }
@@ -92,31 +90,16 @@ public class GameView extends SurfaceView implements Runnable {
         if(surfaceHolder.getSurface().isValid())
         {
             Canvas canvas = surfaceHolder.lockCanvas();
-            canvas.drawBitmap(background, 0, 0, paint);
-            stats(canvas);
-            float scale = 0.5f;
-            if(nyanko != null){
-                nyanko.draw(canvas, scale);
+            background = Bitmap.createScaledBitmap(background, screenWidth, screenHeight, false);
+                canvas.drawBitmap(background, 0, 0, null);
+            if(nyankoAI != null){
+                nyankoAI.draw(canvas);
+                canvas.drawCircle(screenWidth / 2, screenHeight / 2, 50, new Paint());
             }else {
                 Log.e(TAG, "NyankoAI is null in draw()");
             }
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
-    }
-    public void stats(Canvas canvas)
-    {
-        int left = 30;
-        int top = 50;
-        int right = 400;
-        int bottom = 250;
-        canvas.drawRect(left, top, right, bottom, backgroundPaint);
-        canvas.drawRect(left, top, right, bottom, borderPaint);
-        paint.setColor(Color.BLACK);
-        paint.setTextSize(50);
-        canvas.drawText("HP: " + hp + "/10", left + 20, top + 50, paint);
-        canvas.drawText("Hunger: " + hunger + "/10", left + 20, top + 110, paint);
-        canvas.drawText("Mood: " + mood,left + 20, top+ 170, paint);
-
     }
     private void control()
     {

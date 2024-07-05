@@ -1,9 +1,12 @@
 package com.example.nyanyanko;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.text.PrecomputedText;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import java.util.Random;
@@ -11,7 +14,6 @@ import java.util.Random;
 public class NyankoAI {
     private long lastMoveTime;
     private Bitmap bitmap;
-    private Bitmap scaledBitmap;
     private int x,y;
     private float speedX, speedY;
     private int screenWidth, screenHeight;
@@ -24,39 +26,35 @@ public class NyankoAI {
       this.x = screenWidth;
       this.y = screenHeight;
 
-      this.screenWidth = screenWidth;
-      this.screenHeight = screenHeight;
+      this.screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+      this.screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
 
       this.speedX = DEFAULT_SPEED;
       this.speedY = DEFAULT_SPEED;
 
       this.random = new Random();
-      scaleBitmap(scale);
+
    }
-   public void update(int screenWidth, int screenHeight) {
+   public void update(){
        x += speedX;
        y += speedY;
 
-       if(x <= 0 || x + bitmap.getWidth() >= screenWidth || y <= 0 || y + bitmap.getHeight() >= screenHeight) {
+       //if(x <= 0 || x + bitmap.getWidth() >= screenWidth || y <= 0 || y + bitmap.getHeight() >= screenHeight) {
            //Randomize new movement angle
-           double angle = random.nextDouble() * 2 * Math.PI; // Random angle in radians
-           speedX = (float) (DEFAULT_SPEED * Math.cos(angle));
-           speedY = (float) (DEFAULT_SPEED * Math.sin(angle));
+          // double angle = random.nextDouble() * 2 * Math.PI; // Random angle in radians
+           //speedX = (float) (DEFAULT_SPEED * Math.cos(angle));
+           //speedY = (float) (DEFAULT_SPEED * Math.sin(angle));
+       //}
+       double angle = random.nextDouble() * 2 * Math.PI;
+       if(x <= 0 || x + bitmap.getWidth() >= screenWidth){
+           speedX = (float) (DEFAULT_SPEED* Math.cos(angle));
+       }
+       if(y <= 0 || y + bitmap.getHeight()>= screenHeight){
+           speedY = (float) (DEFAULT_SPEED* Math.sin(angle));
        }
    }
-    private void scaleBitmap(float scale) {
-        int scaledWidth = (int) (bitmap.getWidth() * scale);
-        int scaledHeight = (int) (bitmap.getHeight() * scale);
-
-        // Create a matrix for the scaling transformation
-        Matrix matrix = new Matrix();
-        matrix.postScale(scale, scale);
-
-        // Apply the transformation to the bitmap
-        this.scaledBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-    }
-   public void draw(Canvas canvas, float scale){
-           canvas.drawBitmap(scaledBitmap, x, y,null);
+   public void draw(Canvas canvas){
+           canvas.drawBitmap(bitmap, x, y,new Paint());
    }
    public void setSpeed(float speedX, float speedY){
        this.speedX = speedX;
