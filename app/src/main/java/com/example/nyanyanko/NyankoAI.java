@@ -9,6 +9,9 @@ import android.util.Log;
 import java.util.Random;
 
 public class NyankoAI {
+
+    //Hello layout branch!!
+
     private Gameplay gameplay;
     private Bitmap bitmap;
     private int x,y;
