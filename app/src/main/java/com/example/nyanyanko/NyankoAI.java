@@ -56,6 +56,7 @@ public class NyankoAI {
     }
     private Mood currentMood = Mood.DEFAULT;
     private List<InventoryItem> inventory;
+    private List<ToyItem> toy;
     public NyankoAI(Bitmap bitmap, int screenWidth, int screenHeight)
    {
       this.bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
@@ -78,6 +79,7 @@ public class NyankoAI {
       this.hungerTime = System.currentTimeMillis();
 
       this.inventory = new ArrayList<>();
+      this.toy = new ArrayList<>();
    }
 
    public void update(){
@@ -111,6 +113,18 @@ public class NyankoAI {
         }
         inventory.add(item);
         Log.d(TAG, "Add item " + item.getName());
+    }
+    public List<ToyItem> getToy(){
+        return toy;
+    }
+    public void addItemToToy(ToyItem item) {
+        for(ToyItem toyItem : toy){
+            if(toyItem.getName().equals(item.getName())){
+                toyItem.setQuantity((toyItem.getQuantity() + 1));
+                return;
+            }
+        }
+        toy.add(item);
     }
     //endregion
    //region Stats

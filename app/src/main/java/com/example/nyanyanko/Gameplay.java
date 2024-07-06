@@ -15,12 +15,18 @@ import java.util.logging.LogRecord;
 public class Gameplay extends AppCompatActivity {
     private GameView gameView;
     private Button openInventoryBTN;
-
+    private int playerCoins;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gameplay);
 
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("playerCoins")) {
+            playerCoins = intent.getIntExtra("playerCoins", 50); // Default value is 50
+        } else {
+            playerCoins = 50; // Default value if Intent does not contain playerCoins
+        }
         FrameLayout frameLayout = findViewById(R.id.act_gameplay);
         gameView = new GameView(this);
         frameLayout.addView(gameView, 0);
@@ -70,6 +76,7 @@ public class Gameplay extends AppCompatActivity {
     private void openShop() {
         gameView.setPause(true);
         Intent intent = new Intent(this, ShopActivity.class);
+        intent.putExtra("playerCoins", playerCoins);
         startActivity(intent);
     }
 

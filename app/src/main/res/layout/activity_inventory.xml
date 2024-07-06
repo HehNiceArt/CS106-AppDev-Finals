@@ -10,12 +10,12 @@
     android:background="#F0F0F0"
     tools:context=".InventoryActivity">
 
-    <Button
-        android:id="@+id/returnBTN"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="BACK" />
-
+        <Button
+            android:id="@+id/returnBTN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="BACK" />
     <ListView
         android:id="@+id/inventoryList"
         android:layout_width="match_parent"

@@ -14,8 +14,8 @@ import java.util.List;
 
 public class InventoryActivity extends Activity{
     private ListView inventoryListView;
-    private ArrayAdapter<String> adapter;
     private NyankoAI nyankoAI;
+    private InventoryAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +37,9 @@ public class InventoryActivity extends Activity{
         });
     }
     private void updateInventory(){
-        List<String> inventoryItems = new ArrayList<>();
-        for(InventoryItem item : nyankoAI.getInventory()){
-            inventoryItems.add(item.getName() + " x " + item.getQuantity());
-        }
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, inventoryItems);
+        List<InventoryItem> inventoryItems = nyankoAI.getInventory();
+        adapter = new InventoryAdapter(this, inventoryItems);
+        //adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, inventoryItems);
         inventoryListView.setAdapter(adapter);
     }
 }
