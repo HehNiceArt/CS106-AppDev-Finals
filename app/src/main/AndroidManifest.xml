@@ -13,6 +13,15 @@
         android:theme="@style/Theme.NyaNyanko"
         tools:targetApi="31">
         <activity
+            android:name=".ShopActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Shop"
+            android:exported="false" />
+        <activity
+            android:name=".InventoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".GameView"
             android:exported="false" />
         <activity
