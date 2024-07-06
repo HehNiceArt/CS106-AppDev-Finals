@@ -34,13 +34,37 @@ public class Gameplay extends AppCompatActivity {
                 startActivityForResult(intent, 1);
             }
         });
+        Button openToyBTN = findViewById(R.id.toyBTN);
+        openToyBTN.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+               openToy();
+            }
+        });
+        Button menuBTN = findViewById(R.id.menuBTN);
+        menuBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMenu();
+            }
+        });
         Button openShopBTN = findViewById(R.id.shopBTN);
-            openShopBTN.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openShop();
-                }
-            });
+        openShopBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openShop();
+            }
+        });
+    }
+    private void openMenu(){
+        gameView.setPause(true);
+        Intent intent = new Intent(this, MenuActivity.class);
+        startActivity(intent);
+    }
+    private void openToy(){
+        gameView.setPause(true);
+        Intent intent = new Intent(this, ToyActivity.class);
+        startActivity(intent);
     }
 
     private void openShop() {
