@@ -31,6 +31,7 @@
             android:background="@drawable/cat_border"
             android:ellipsize="none"
             android:ems="5"
+            android:maxLength="8"
             android:fontFamily="@font/lakki_reddy"
             android:inputType="text"
             android:text=""
