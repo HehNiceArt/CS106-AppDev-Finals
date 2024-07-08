@@ -137,8 +137,7 @@
                     android:backgroundTintMode="add"
                     android:foreground="@drawable/shopping_bag"
                     android:onClick="handleShopBTNClick" />
-
-            </LinearLayout>
+                </LinearLayout>
         </LinearLayout>
 
     </FrameLayout>

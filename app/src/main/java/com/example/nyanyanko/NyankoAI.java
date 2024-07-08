@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class NyankoAI {
@@ -56,7 +58,9 @@ public class NyankoAI {
         }
     }
     private Mood currentMood = Mood.DEFAULT;
-    public NyankoAI(Bitmap bitmap, int screenWidth, int screenHeight, float scale)
+    private List<InventoryItem> inventory;
+    private List<ToyItem> toy;
+    public NyankoAI(Bitmap bitmap, int screenWidth, int screenHeight)
    {
       this.bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
       this.x = screenWidth;
@@ -76,6 +80,9 @@ public class NyankoAI {
 
       this.hpTime = System.currentTimeMillis();
       this.hungerTime = System.currentTimeMillis();
+
+      this.inventory = new ArrayList<>();
+      this.toy = new ArrayList<>();
    }
 
    public void update(){
@@ -95,8 +102,37 @@ public class NyankoAI {
         checkHealth();
         checkMood(currentTime);
    }
+   //region Inventory
+    public List<InventoryItem> getInventory(){
+        return inventory;
+    }
+    public void addItemToInventory(InventoryItem item){
+        for(InventoryItem invItem : inventory){
+           if(invItem.getName().equals(item.getName())){
+               invItem.setQuantity(invItem.getQuantity() + 1);
+               Log.d(TAG, "Update quantity of " + item.getName());
+               return;
+           }
+        }
+        inventory.add(item);
+        Log.d(TAG, "Add item " + item.getName());
+    }
+    public List<ToyItem> getToy(){
+        return toy;
+    }
+    public void addItemToToy(ToyItem item) {
+        for(ToyItem toyItem : toy){
+            if(toyItem.getName().equals(item.getName())){
+                toyItem.setQuantity((toyItem.getQuantity() + 1));
+                return;
+            }
+        }
+        toy.add(item);
+    }
+    //endregion
+   //region Stats
    private void decreaseHunger(long currentTime){
-        if(currentTime - hungerTime> 1000){
+        if(currentTime - hungerTime> 60000){
             hunger--;
             if(hunger >= 0){
                 hungerTime= currentTime;
@@ -106,7 +142,7 @@ public class NyankoAI {
         }
    }
     private void decreaseHP(long currentTime){
-        if(currentTime - hpTime> 1000){
+        if(currentTime - hpTime> 120000){
             hp--;
             if(hp>= 0){
                 hpTime= currentTime;
@@ -129,7 +165,8 @@ public class NyankoAI {
            setMood(Mood.ANGRY);
         }
    }
-
+   //endregion
+    //region Behavior trees
     private void switchState(){
         if(currentState == State.WALKING){
             currentState = State.IDLE;
@@ -201,6 +238,7 @@ public class NyankoAI {
             lastStateChangeTime = System.currentTimeMillis() - (statePauseTime - lastStateChangeTime); // Adjust state change time
         }
     }
+    //endregion
    public void draw(Canvas canvas){
            canvas.drawBitmap(bitmap, x, y,new Paint());
    }
