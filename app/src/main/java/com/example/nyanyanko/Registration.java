@@ -2,8 +2,11 @@ package com.example.nyanyanko;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.widget.Button;
 import android.os.Bundle;
+import android.widget.EditText;
+import android.widget.Toast;
 
 public class Registration extends AppCompatActivity {
 
@@ -15,8 +18,9 @@ public class Registration extends AppCompatActivity {
 
         registerButton.setOnClickListener(v ->
         {
-            Intent intent = new Intent(Registration.this, Splash.class);
-            startActivity(intent);
+                Intent intent = new Intent(Registration.this, Splash.class);
+                startActivity(intent);
         });
     }
+
 }
