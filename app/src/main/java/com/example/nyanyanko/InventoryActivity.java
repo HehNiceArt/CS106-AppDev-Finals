@@ -8,11 +8,12 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class InventoryActivity extends Activity{
+public class InventoryActivity extends Activity implements InventoryAdapter.OnItemInteractionListener{
     private ListView inventoryListView;
     private NyankoAI nyankoAI;
     private InventoryAdapter adapter;
@@ -38,8 +39,11 @@ public class InventoryActivity extends Activity{
     }
     private void updateInventory(){
         List<InventoryItem> inventoryItems = nyankoAI.getInventory();
-        adapter = new InventoryAdapter(this, inventoryItems);
-        //adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, inventoryItems);
+        adapter = new InventoryAdapter(this, inventoryItems, this);
         inventoryListView.setAdapter(adapter);
+    }
+    @Override
+    public void onItemClick(InventoryItem item){
+        Toast.makeText(this, "Clicked on " + item.getName(), Toast.LENGTH_LONG).show();
     }
 }
