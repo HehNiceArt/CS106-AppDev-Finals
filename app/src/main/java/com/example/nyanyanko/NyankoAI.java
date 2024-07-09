@@ -1,16 +1,21 @@
 package com.example.nyanyanko;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
 
+import androidx.appcompat.app.AlertDialog;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class NyankoAI {
+public class NyankoAI{
     private Bitmap bitmap;
     private int x, y;
     private float speedX, speedY;
@@ -59,8 +64,10 @@ public class NyankoAI {
     private Mood currentMood = Mood.DEFAULT;
     private List<InventoryItem> inventory;
     private List<ToyItem> toy;
+    Context mcontext;
 
-    public NyankoAI(Bitmap bitmap, int screenWidth, int screenHeight) {
+    public NyankoAI(Context context, Bitmap bitmap, int screenWidth, int screenHeight) {
+        this.mcontext = context;
         this.bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         this.x = screenWidth;
         this.y = screenHeight;
@@ -98,7 +105,7 @@ public class NyankoAI {
         }
 
         decreaseHunger(currentTime);
-        checkHealth();
+        checkHP();
         checkMood(currentTime);
     }
 
@@ -136,7 +143,7 @@ public class NyankoAI {
     //endregion
     //region Stats
     private void decreaseHunger(long currentTime) {
-        if (currentTime - hungerTime > 60000) {
+        if (currentTime - hungerTime > 1000) {
             hunger--;
             if (hunger >= 0) {
                 hungerTime = currentTime;
@@ -147,19 +154,13 @@ public class NyankoAI {
     }
 
     private void decreaseHP(long currentTime) {
-        if (currentTime - hpTime > 120000) {
+        if (currentTime - hpTime > 1200) {
             hp--;
             if (hp >= 0) {
                 hpTime = currentTime;
             } else {
                 hp = 0;
             }
-        }
-    }
-
-    private void checkHealth() {
-        if (hp <= 0) {
-            //have a pop up and say game over
         }
     }
 
@@ -170,6 +171,8 @@ public class NyankoAI {
         } else if (hunger <= 3 && hunger >= 0) {
             decreaseHP(currentTIme);
             setMood(Mood.ANGRY);
+        } else{
+            setMood(Mood.DEFAULT);
         }
     }
 
@@ -266,11 +269,44 @@ public class NyankoAI {
     public void draw(Canvas canvas) {
         canvas.drawBitmap(bitmap, x, y, new Paint());
     }
-
     public int getHunger() {
         return hunger;
     }
+    public void fillHunger(int hungerChange){
+        int currentHunger = hunger;
+       currentHunger += hungerChange;
+       if(currentHunger > 10){
+       }else {
+           hunger = currentHunger;
+       }
+    }
+    public void checkHP(){
+        if(hp <= 0){
+            showGameOverDialog();
+            Log.d(TAG, "Showing game over dialog");
+        }
+    }
+    public void fillHP(int hpChange){
+        int currentHP = hp;
+        currentHP += hpChange;
+        if(currentHP > 10){
+        }else{
+            hp = currentHP;
+        }
+    }
+    private void showGameOverDialog() {
+        ((Activity) mcontext).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
 
+                AlertDialog.Builder builder = new AlertDialog.Builder(mcontext);
+                builder.setTitle("Game Over");
+                builder.setMessage("Nyanko's health has dropped to 0. Game over!");
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+    }
     public int getHP() {
         return hp;
     }

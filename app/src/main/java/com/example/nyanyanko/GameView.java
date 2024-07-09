@@ -2,6 +2,7 @@ package com.example.nyanyanko;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -15,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -22,10 +24,11 @@ import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
 
-public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Callback {
+public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Callback{
 
     private static final String TAG = "GameView";
     private NyankoAI nyankoAI;
+    private Gameplay gameplay;
     private Thread gameThread = null;
     private boolean isPlaying;
     private SurfaceHolder surfaceHolder;
@@ -56,6 +59,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
         Bitmap nyankoBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.nyanko);
         background = BitmapFactory.decodeResource(getResources(), R.drawable.gameviewbg);
 
+        gameplay = new Gameplay();
         if(nyankoBitmap != null){
             nyankoAI = NyankoManager.getInstance(getContext());
             Log.d(TAG, "cat spawning");
@@ -168,4 +172,5 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
     public void setPause(boolean paused){
         this.isPaused = paused;
     }
+
 }

@@ -16,6 +16,9 @@ public class ShopItem {
         return name;
     }
     public int getHP(){
+        return hp;
+    }
+    public int getHunger(){
         return hunger;
     }
     public int getCost(){

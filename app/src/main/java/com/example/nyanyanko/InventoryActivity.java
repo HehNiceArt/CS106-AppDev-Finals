@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,6 +23,7 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
     private InventoryAdapter adapter;
     private List<InventoryItem> inventoryItems;
     private GameView gameView;
+    private Bitmap eating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +52,14 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
     @Override
     public void onItemClick(InventoryItem item){
         int currentQuantity = item.getQuantity();
+        eating = BitmapFactory.decodeResource(getResources(), R.drawable.nyanko);
+        int hungerVal = item.getHunger();
+        int hpVal = item.getHp();
 
         if(currentQuantity > 0){
+            showImageDialog();
+            nyankoAI.fillHunger(hungerVal);
+            nyankoAI.fillHP(hpVal);
             item.setQuantity(currentQuantity - 1);
             if(item.getQuantity() == 0){
                 inventoryItems.remove(item);
@@ -58,6 +68,12 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
                 Toast.makeText(this, "Used one" + item.getName() + " x " + item.getQuantity(), Toast.LENGTH_SHORT).show();
             }
             adapter.notifyDataSetChanged();
+        }
+    }
+    private void showImageDialog(){
+        if(!isFinishing()) {
+            ImageDialog dialog = new ImageDialog(this, eating);
+            dialog.show();
         }
     }
 }

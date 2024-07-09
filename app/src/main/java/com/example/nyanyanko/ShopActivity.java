@@ -47,11 +47,13 @@ public class ShopActivity extends AppCompatActivity {
                 ShopItem item = (ShopItem) parent.getItemAtPosition(position);
                 if(playerCoins >= item.getCost()){
                     playerCoins -= item.getCost();
+                    int hp = item.getHP();
+                    int hunger = item.getHunger();
 
                     coins.setText(String.valueOf(playerCoins));
 
                     Bitmap itemIcon = getItemIcon(item.getName());
-                    InventoryItem inventoryItem = new InventoryItem(item.getName(), 1, itemIcon);
+                    InventoryItem inventoryItem = new InventoryItem(item.getName(), 1, hp, hunger, itemIcon);
                     ToyItem toyItem = new ToyItem(item.getName(), 1, itemIcon);
 
                     if(item.getName().equals("Mouse Plush") || item.getName().equals("Feather")){
