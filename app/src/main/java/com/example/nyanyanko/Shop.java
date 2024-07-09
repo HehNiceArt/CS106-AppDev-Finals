@@ -13,13 +13,16 @@ public class Shop {
 
     public Shop() {
         shopItems = new ArrayList<>();
-        shopItems.add(new ShopItem("Dry Food", 2, 3, 2));
-        shopItems.add(new ShopItem("Wet Food", 4, 6, 7));
-        shopItems.add(new ShopItem("Tuna", 6, 8, 12));
-        shopItems.add(new ShopItem("Mouse Plush", 0, 0, 5));
-        shopItems.add(new ShopItem("Feather", 0, 0, 7));
-        shopItems.add(new ShopItem("Shark Costume", 0, 0, 15));
-        shopItems.add(new ShopItem("Shrimp Costume", 0, 0, 25));
+
+        shopItems.add(new ShopItem("Dry Food", 2, 1, 5));
+        shopItems.add(new ShopItem("Wet Food", 4, 3, 8));
+        shopItems.add(new ShopItem("Tuna", 6, 6, 14));
+
+        shopItems.add(new ShopItem("Mouse Plush", 1, 0, 5));
+        shopItems.add(new ShopItem("Feather", 3, 0, 10));
+
+        shopItems.add(new ShopItem("Shark Costume", 0, 0, 25));
+        shopItems.add(new ShopItem("Shrimp Costume", 0, 0, 45));
     }
     public List<ShopItem> getShopItems(){
         return  shopItems;

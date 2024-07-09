@@ -23,9 +23,9 @@ public class Gameplay extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("playerCoins")) {
-            playerCoins = intent.getIntExtra("playerCoins", 50); // Default value is 50
+            playerCoins = intent.getIntExtra("playerCoins", 20); // Default value is 20
         } else {
-            playerCoins = 50; // Default value if Intent does not contain playerCoins
+            playerCoins = 20; // Default value if Intent does not contain playerCoins
         }
         FrameLayout frameLayout = findViewById(R.id.act_gameplay);
         gameView = new GameView(this);

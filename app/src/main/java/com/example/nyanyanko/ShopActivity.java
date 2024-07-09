@@ -21,7 +21,7 @@ import java.util.List;
 public class ShopActivity extends AppCompatActivity {
     private Shop shop;
     private NyankoAI nyankoAI;
-    private int playerCoins = 50;
+    private int playerCoins = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class ShopActivity extends AppCompatActivity {
         shop = new Shop();
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("playerCoins")) {
-            playerCoins = intent.getIntExtra("playerCoins", 50);
+            playerCoins = intent.getIntExtra("playerCoins", 20);
         }
         ListView shopListView = findViewById(R.id.shop_list);
         TextView coins = findViewById(R.id.coinID);
