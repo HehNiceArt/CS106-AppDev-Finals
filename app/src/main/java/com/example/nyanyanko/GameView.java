@@ -11,10 +11,13 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
@@ -29,8 +32,6 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
     private Bitmap background;
     private int screenWidth;
     private int screenHeight;
-
-    public int initialX, initialY;
 
     public boolean isPaused;
     public GameView(Context context){
@@ -128,15 +129,18 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
     }
+
     public void displayText(Canvas canvas){
         NyankoAI.Mood initialMood = nyankoAI.getMood();
 
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setTextSize(50);
-        canvas.drawText("HP: " + nyankoAI.getHP() +"/10", 20, 100, paint);
-        canvas.drawText("Hunger: " + nyankoAI.getHunger() +"/10", 20, 150, paint);
-        canvas.drawText("Mood: " + initialMood.getMoodString(),20, 200, paint);
+        int _x = 20;
+        int _y = 150;
+        canvas.drawText("HP: " + nyankoAI.getHP() +"/10", _x, _y, paint);
+        canvas.drawText("Hunger: " + nyankoAI.getHunger() +"/10", _x, _y + 50, paint);
+        canvas.drawText("Mood: " + initialMood.getMoodString(),_x, _y + 100, paint);
     }
     private void control() {
         try{

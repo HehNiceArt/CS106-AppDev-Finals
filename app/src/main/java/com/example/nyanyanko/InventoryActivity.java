@@ -3,6 +3,7 @@ package com.example.nyanyanko;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -17,6 +18,8 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
     private ListView inventoryListView;
     private NyankoAI nyankoAI;
     private InventoryAdapter adapter;
+    private List<InventoryItem> inventoryItems;
+    private GameView gameView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +41,23 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
         });
     }
     private void updateInventory(){
-        List<InventoryItem> inventoryItems = nyankoAI.getInventory();
+        inventoryItems = nyankoAI.getInventory();
         adapter = new InventoryAdapter(this, inventoryItems, this);
         inventoryListView.setAdapter(adapter);
     }
     @Override
     public void onItemClick(InventoryItem item){
-        Toast.makeText(this, "Clicked on " + item.getName(), Toast.LENGTH_LONG).show();
+        int currentQuantity = item.getQuantity();
+
+        if(currentQuantity > 0){
+            item.setQuantity(currentQuantity - 1);
+            if(item.getQuantity() == 0){
+                inventoryItems.remove(item);
+                Toast.makeText(this, item.getName() + " is now empty", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this, "Used one" + item.getName() + " x " + item.getQuantity(), Toast.LENGTH_SHORT).show();
+            }
+            adapter.notifyDataSetChanged();
+        }
     }
 }
