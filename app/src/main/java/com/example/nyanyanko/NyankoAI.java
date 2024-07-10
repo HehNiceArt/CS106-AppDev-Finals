@@ -143,7 +143,7 @@ public class NyankoAI{
     //endregion
     //region Stats
     private void decreaseHunger(long currentTime) {
-        if (currentTime - hungerTime > 1000) {
+        if (currentTime - hungerTime > 60000) {
             hunger--;
             if (hunger >= 0) {
                 hungerTime = currentTime;
@@ -154,7 +154,7 @@ public class NyankoAI{
     }
 
     private void decreaseHP(long currentTime) {
-        if (currentTime - hpTime > 1200) {
+        if (currentTime - hpTime > 120000) {
             hp--;
             if (hp >= 0) {
                 hpTime = currentTime;
@@ -218,8 +218,8 @@ public class NyankoAI{
         Log.e(TAG, "Dist" + distance);
 
         if (distance > DEFAULT_SPEED) {
-            speedX = (float) (DEFAULT_SPEED * (deltaX / distance));
-            speedY = (float) (DEFAULT_SPEED * (deltaY / distance));
+            speedX = (float) (DEFAULT_SPEED * (deltaX / distance) );
+            speedY = (float) (DEFAULT_SPEED * (deltaY / distance) );
             x += speedX;
             y += speedY;
         } else {
