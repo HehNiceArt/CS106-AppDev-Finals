@@ -3,10 +3,12 @@ package com.example.nyanyanko;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 import android.view.Window;
 import android.widget.ImageView;
 
@@ -27,6 +29,7 @@ public class ImageDialog extends Dialog {
         setContentView(R.layout.popup_image_layout);
         ImageView imageView = findViewById(R.id.imageView);
         imageView.setImageBitmap(imageResource);
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

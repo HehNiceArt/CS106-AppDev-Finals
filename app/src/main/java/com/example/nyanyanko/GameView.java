@@ -29,21 +29,25 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
     private static final String TAG = "GameView";
     private NyankoAI nyankoAI;
     private Gameplay gameplay;
+    private ShopActivity shopActivity;
     private Thread gameThread = null;
     private boolean isPlaying;
     private SurfaceHolder surfaceHolder;
     private Bitmap background;
     private int screenWidth;
     private int screenHeight;
+    private Handler handler;
 
     public boolean isPaused;
     public GameView(Context context){
         super(context);
         surfaceHolder = getHolder();
 
+        shopActivity = new ShopActivity();
         surfaceCreated(surfaceHolder);
         surfaceHolder.addCallback(this);
 
+        triggerCoinIncrement();
         setFocusable(true);
     }
 
@@ -67,6 +71,11 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
             Log.e(TAG, "cat is null!");
         }
     }
+    public static void triggerCoinIncrement(){
+        Log.d(TAG, "Initializing background coin increment");
+        ShopManager.getInstance().startCoinIncrementTask();
+    }
+
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
 
@@ -172,5 +181,6 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
     public void setPause(boolean paused){
         this.isPaused = paused;
     }
+    //TODO coin increment in background still buggy af
 
 }

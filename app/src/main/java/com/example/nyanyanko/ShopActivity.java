@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,13 +23,15 @@ public class ShopActivity extends AppCompatActivity {
     private Shop shop;
     private NyankoAI nyankoAI;
     private int playerCoins = 20;
-
+    private Handler handler;
+    TextView coins;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop);
 
         nyankoAI = NyankoManager.getInstance(this);
+        handler = new Handler();
 
         shop = new Shop();
         Intent intent = getIntent();
@@ -36,11 +39,12 @@ public class ShopActivity extends AppCompatActivity {
             playerCoins = intent.getIntExtra("playerCoins", 20);
         }
         ListView shopListView = findViewById(R.id.shop_list);
-        TextView coins = findViewById(R.id.coinID);
+        coins = findViewById(R.id.coinID);
         coins.setText(String.valueOf(playerCoins));
         ArrayAdapter<ShopItem> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, shop.getShopItems());
         shopListView.setAdapter(adapter);
 
+        ShopManager.getInstance().setShopActivity(this);
         shopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -76,10 +80,24 @@ public class ShopActivity extends AppCompatActivity {
                 Intent intent = new Intent(ShopActivity.this, Gameplay.class);
                 intent.putExtra("playerCoins", playerCoins);
                 startActivity(intent);
-                finish();
             }
 
         });
+        GameView.triggerCoinIncrement();
+    }
+    public void startPassiveIncome(){
+        handler.postDelayed(new Runnable(){
+            @Override
+            public void run(){
+                increaseCoins();
+                Log.d("shopact", "Coins: "+playerCoins);
+                handler.postDelayed(this, 2000);
+            }
+        }, 2000);
+    }
+    private void increaseCoins(){
+        playerCoins += 1;
+        coins.setText(String.valueOf(playerCoins));
     }
     private Bitmap getItemIcon(String itemName) {
         int resId = 0;
@@ -110,5 +128,11 @@ public class ShopActivity extends AppCompatActivity {
                 break;
         }
         return BitmapFactory.decodeResource(getResources(), resId);
+    }
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
+        ShopManager.getInstance().clearShopActivity();
     }
 }

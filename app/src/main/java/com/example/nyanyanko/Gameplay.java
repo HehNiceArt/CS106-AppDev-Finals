@@ -40,6 +40,7 @@ public class Gameplay extends AppCompatActivity {
             public void onClick(View v) {
                 gameView.setPause(true);
                 Intent intent = new Intent(Gameplay.this, InventoryActivity.class);
+                overridePendingTransition(0, 0);
                 startActivityForResult(intent, 1);
             }
         });
@@ -79,11 +80,13 @@ public class Gameplay extends AppCompatActivity {
         gameView.setPause(true);
         Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);
+        overridePendingTransition(0, 0);
     }
     private void openToy(){
         gameView.setPause(true);
         Intent intent = new Intent(this, ToyActivity.class);
         startActivity(intent);
+        overridePendingTransition(0, 0);
     }
 
     private void openShop() {
@@ -91,6 +94,7 @@ public class Gameplay extends AppCompatActivity {
         Intent intent = new Intent(this, ShopActivity.class);
         intent.putExtra("playerCoins", playerCoins);
         startActivity(intent);
+        overridePendingTransition(0, 0);
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.example.nyanyanko;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -256,8 +255,6 @@ public class NyankoAI{
 
     //endregion
     //region Income
-    public void passiveIncome() {
-    }
     //When playing with Nyanko
     public void incomeBonus(){
 
