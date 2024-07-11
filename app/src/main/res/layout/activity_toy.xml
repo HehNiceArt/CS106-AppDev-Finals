@@ -20,9 +20,15 @@
             android:layout_height="wrap_content"
             android:text="BACK" />
 
-        <ListView
+        <GridView
+            android:id="@+id/toyGrid"
             android:layout_width="match_parent"
-            android:id="@+id/toyList"
+            android:numColumns="auto_fit"
+            android:columnWidth="100dp"
+            android:horizontalSpacing="10dp"
+            android:verticalSpacing="10dp"
+            android:stretchMode="columnWidth"
+            android:gravity="center"
             android:layout_height="wrap_content" />
     </LinearLayout>
 

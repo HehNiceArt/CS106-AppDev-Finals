@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.GridView;
 import android.widget.Toast;
 
 import com.example.nyanyanko.GameView;
@@ -23,7 +23,7 @@ import com.example.nyanyanko.ShopAct.ShopActivity;
 import java.util.List;
 
 public class InventoryActivity extends Activity implements InventoryAdapter.OnItemInteractionListener{
-    private ListView inventoryListView;
+    private GridView inventoryGridView;
     private NyankoAI nyankoAI;
     private InventoryAdapter adapter;
     private List<InventoryItem> inventoryItems;
@@ -35,7 +35,7 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inventory);
 
-        inventoryListView = findViewById(R.id.inventoryList);
+        inventoryGridView= findViewById(R.id.inventoryGrid);
 
         nyankoAI = NyankoManager.getInstance(this);
         CoinManager.getInstance().startCoinIncrement();
@@ -58,7 +58,7 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
     private void updateInventory(){
         inventoryItems = nyankoAI.getInventory();
         adapter = new InventoryAdapter(this, inventoryItems, this);
-        inventoryListView.setAdapter(adapter);
+        inventoryGridView.setAdapter(adapter);
     }
     @Override
     public void onItemClick(InventoryItem item){

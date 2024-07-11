@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.GridView;
 
 import com.example.nyanyanko.Gameplay;
 import com.example.nyanyanko.NyankoAI;
@@ -20,7 +20,7 @@ import java.util.List;
 public class ToyActivity extends AppCompatActivity {
 
     Button backBTN;
-    private ListView toyListView;
+    private GridView toyGridView;
     private ToyAdapter adapter;
     private NyankoAI nyankoAI;
     @Override
@@ -28,7 +28,7 @@ public class ToyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_toy);
 
-        toyListView = findViewById(R.id.toyList);
+        toyGridView = findViewById(R.id.toyGrid);
         nyankoAI = NyankoManager.getInstance(this);
 
         CoinManager.getInstance().startCoinIncrement();
@@ -50,7 +50,7 @@ public class ToyActivity extends AppCompatActivity {
     private void updateToy(){
         List<ToyItem> toyItems = nyankoAI.getToy();
         adapter = new ToyAdapter(this, toyItems);
-        toyListView.setAdapter(adapter);
+        toyGridView.setAdapter(adapter);
     }
     @Override
     protected void onPause(){
