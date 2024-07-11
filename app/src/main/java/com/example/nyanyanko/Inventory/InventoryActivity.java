@@ -66,6 +66,7 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
         eating = BitmapFactory.decodeResource(getResources(), R.drawable.nyanko);
         int hungerVal = item.getHunger();
         int hpVal = item.getHp();
+        Log.d("Inventory", "hunger " + hungerVal);
 
         if(currentQuantity > 0){
             showImageDialog();

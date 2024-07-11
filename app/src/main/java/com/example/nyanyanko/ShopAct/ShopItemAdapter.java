@@ -47,7 +47,7 @@ public class ShopItemAdapter extends ArrayAdapter<ShopItem> {
 
         viewHolder.icon.setImageBitmap(currentItem.getIcon());
         viewHolder.name.setText(currentItem.getName());
-        viewHolder.cost.setText(String.valueOf(currentItem.getCost()));
+        viewHolder.cost.setText(String.format("%d Coins", currentItem.getCost()));
 
         view.setOnClickListener(v -> listener.onItemClick(currentItem));
 

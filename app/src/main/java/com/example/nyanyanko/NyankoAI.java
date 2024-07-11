@@ -278,7 +278,7 @@ public class NyankoAI{
        currentHunger += hungerChange;
        if(currentHunger > 10){
        }else {
-           hunger = currentHunger;
+           hunger = 10;
        }
     }
     public void checkHP(){
@@ -292,7 +292,7 @@ public class NyankoAI{
         currentHP += hpChange;
         if(currentHP > 10){
         }else{
-            hp = currentHP;
+            hp = 10;
         }
     }
     private void showGameOverDialog() {
