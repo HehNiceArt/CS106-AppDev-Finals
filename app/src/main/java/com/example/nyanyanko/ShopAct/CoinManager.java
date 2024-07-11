@@ -11,7 +11,6 @@ public class CoinManager {
     private Handler handler;
     private Runnable coinIncrementTask;
 
-
     private CoinManager(){
         handler = new Handler();
         coinIncrementTask = new Runnable() {

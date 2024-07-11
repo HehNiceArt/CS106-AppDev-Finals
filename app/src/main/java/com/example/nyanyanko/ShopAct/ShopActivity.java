@@ -49,7 +49,9 @@ public class ShopActivity extends AppCompatActivity {
 
         coins = findViewById(R.id.coinID);
         playerCoins = CoinManager.getInstance().getCoins();
+        Log.d("ShopAct", "Starting coin increment in ShopActivity");
         Log.d("ShopAct", "PlayerCoins: " + playerCoins);
+        CoinManager.getInstance().startCoinIncrement();
         updateCoinDisplay();
 
         ArrayAdapter<ShopItem> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, shop.getShopItems());
@@ -70,7 +72,6 @@ public class ShopActivity extends AppCompatActivity {
             }
 
         });
-        Gameplay.incrementCoins();
     }
     private void updateCoinDisplay(){
         Handler handler = new Handler();
@@ -144,8 +145,9 @@ public class ShopActivity extends AppCompatActivity {
         return BitmapFactory.decodeResource(getResources(), resId);
     }
     @Override
-    protected void onDestroy(){
-        super.onDestroy();
+    protected void onPause(){
+        super.onPause();
         CoinManager.getInstance().stopCoinIncrement();
+        Log.d("ShopAct", "Pausing coin increment in ShopActivity");
     }
 }

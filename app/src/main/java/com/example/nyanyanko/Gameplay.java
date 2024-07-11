@@ -114,5 +114,7 @@ public class Gameplay extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         gameView.pause();
+        CoinManager.getInstance().stopCoinIncrement();
+        Log.d("Gameplay", "Pausing coin increment in Gameplay");
     }
 }
