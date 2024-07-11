@@ -1,9 +1,8 @@
-package com.example.nyanyanko;
+package com.example.nyanyanko.ShopAct;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -17,12 +16,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
+import com.example.nyanyanko.Gameplay;
+import com.example.nyanyanko.Inventory.InventoryItem;
+import com.example.nyanyanko.NyankoAI;
+import com.example.nyanyanko.NyankoManager;
+import com.example.nyanyanko.R;
+import com.example.nyanyanko.Shop;
+import com.example.nyanyanko.Toy.ToyItem;
 
 public class ShopActivity extends AppCompatActivity {
     private Shop shop;
     private NyankoAI nyankoAI;
-    private int playerCoins = 20;
+    private int playerCoins;
     private Handler handler;
     TextView coins;
     @Override
@@ -32,72 +37,81 @@ public class ShopActivity extends AppCompatActivity {
 
         nyankoAI = NyankoManager.getInstance(this);
         handler = new Handler();
-
         shop = new Shop();
+
         Intent intent = getIntent();
+
         if (intent != null && intent.hasExtra("playerCoins")) {
             playerCoins = intent.getIntExtra("playerCoins", 20);
         }
+
         ListView shopListView = findViewById(R.id.shop_list);
+
         coins = findViewById(R.id.coinID);
-        coins.setText(String.valueOf(playerCoins));
+        playerCoins = CoinManager.getInstance().getCoins();
+        Log.d("ShopAct", "PlayerCoins: " + playerCoins);
+        updateCoinDisplay();
+
         ArrayAdapter<ShopItem> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, shop.getShopItems());
         shopListView.setAdapter(adapter);
 
-        ShopManager.getInstance().setShopActivity(this);
         shopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ShopItem item = (ShopItem) parent.getItemAtPosition(position);
-                if(playerCoins >= item.getCost()){
-                    playerCoins -= item.getCost();
-                    int hp = item.getHP();
-                    int hunger = item.getHunger();
-
-                    coins.setText(String.valueOf(playerCoins));
-
-                    Bitmap itemIcon = getItemIcon(item.getName());
-                    InventoryItem inventoryItem = new InventoryItem(item.getName(), 1, hp, hunger, itemIcon);
-                    ToyItem toyItem = new ToyItem(item.getName(), 1, itemIcon);
-
-                    if(item.getName().equals("Mouse Plush") || item.getName().equals("Feather")){
-                        nyankoAI.addItemToToy(toyItem);
-                    }else {
-                        nyankoAI.addItemToInventory(inventoryItem);
-                    }
-
-                    Log.d("Shop", "item purchased! " + item.getName());
-                    Toast.makeText(ShopActivity.this, "Purchased: " + item.getName(), Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(ShopActivity.this, "Not enough coins!", Toast.LENGTH_SHORT).show();
-                }
+                itemBuy(item);
             }
         });
         Button backBTN = findViewById(R.id.backBTN);
         backBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                Intent intent = new Intent(ShopActivity.this, Gameplay.class);
-                intent.putExtra("playerCoins", playerCoins);
-                startActivity(intent);
+                goBack();
             }
 
         });
-        GameView.triggerCoinIncrement();
+        Gameplay.incrementCoins();
     }
-    public void startPassiveIncome(){
-        handler.postDelayed(new Runnable(){
+    private void updateCoinDisplay(){
+        Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
             @Override
-            public void run(){
-                increaseCoins();
-                Log.d("shopact", "Coins: "+playerCoins);
+            public void run() {
+                coins.setText(String.valueOf(CoinManager.getInstance().getCoins()));
                 handler.postDelayed(this, 2000);
             }
-        }, 2000);
+        };
+        handler.post(runnable);
     }
-    private void increaseCoins(){
-        playerCoins += 1;
-        coins.setText(String.valueOf(playerCoins));
+    private void goBack(){
+        Intent intent = new Intent(ShopActivity.this, Gameplay.class);
+        intent.putExtra("playerCoins", playerCoins);
+        startActivity(intent);
+    }
+
+    private void itemBuy(ShopItem item){
+        if(playerCoins >= item.getCost()){
+            playerCoins = CoinManager.getInstance().decreaseCoins(item.getCost());
+
+            int hp = item.getHP();
+            int hunger = item.getHunger();
+
+            updateCoinDisplay();
+
+            Bitmap itemIcon = getItemIcon(item.getName());
+            InventoryItem inventoryItem = new InventoryItem(item.getName(), 1, hp, hunger, itemIcon);
+            ToyItem toyItem = new ToyItem(item.getName(), 1, itemIcon);
+
+            if(item.getName().equals("Mouse Plush") || item.getName().equals("Feather")){
+                nyankoAI.addItemToToy(toyItem);
+            }else {
+                nyankoAI.addItemToInventory(inventoryItem);
+            }
+
+            Toast.makeText(ShopActivity.this, "Purchased: " + item.getName(), Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(ShopActivity.this, "Not enough coins!", Toast.LENGTH_SHORT).show();
+        }
     }
     private Bitmap getItemIcon(String itemName) {
         int resId = 0;
@@ -132,7 +146,6 @@ public class ShopActivity extends AppCompatActivity {
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        handler.removeCallbacksAndMessages(null);
-        ShopManager.getInstance().clearShopActivity();
+        CoinManager.getInstance().stopCoinIncrement();
     }
 }

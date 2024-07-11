@@ -1,14 +1,16 @@
-package com.example.nyanyanko;
+package com.example.nyanyanko.Toy;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import java.util.ArrayList;
+import com.example.nyanyanko.NyankoAI;
+import com.example.nyanyanko.NyankoManager;
+import com.example.nyanyanko.R;
+
 import java.util.List;
 
 public class ToyActivity extends AppCompatActivity {

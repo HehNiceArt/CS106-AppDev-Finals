@@ -1,19 +1,18 @@
 package com.example.nyanyanko;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
-import android.os.Handler;
-import java.util.logging.LogRecord;
+import com.example.nyanyanko.Inventory.InventoryActivity;
+import com.example.nyanyanko.ShopAct.CoinManager;
+import com.example.nyanyanko.ShopAct.ShopActivity;
+import com.example.nyanyanko.Toy.ToyActivity;
 
 public class Gameplay extends AppCompatActivity {
     private GameView gameView;
@@ -30,6 +29,9 @@ public class Gameplay extends AppCompatActivity {
         } else {
             playerCoins = 20; // Default value if Intent does not contain playerCoins
         }
+
+        incrementCoins();
+
         FrameLayout frameLayout = findViewById(R.id.act_gameplay);
         gameView = new GameView(this);
         frameLayout.addView(gameView, 0);
@@ -65,6 +67,10 @@ public class Gameplay extends AppCompatActivity {
                 openShop();
             }
         });
+    }
+    public static void incrementCoins(){
+        Log.d("Gameplay", "starting coin increment in gameplay");
+        CoinManager.getInstance().startCoinIncrement();
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

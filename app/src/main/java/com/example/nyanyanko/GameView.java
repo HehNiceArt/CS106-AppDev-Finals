@@ -2,7 +2,6 @@ package com.example.nyanyanko;
 
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -12,16 +11,12 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 
-import java.util.ArrayList;
-import java.util.Random;
+import com.example.nyanyanko.ShopAct.ShopActivity;
+
 import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 
 public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Callback{
@@ -47,7 +42,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
         surfaceCreated(surfaceHolder);
         surfaceHolder.addCallback(this);
 
-        triggerCoinIncrement();
+        //triggerCoinIncrement();
         setFocusable(true);
     }
 
@@ -66,16 +61,10 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
         gameplay = new Gameplay();
         if(nyankoBitmap != null){
             nyankoAI = NyankoManager.getInstance(getContext());
-            Log.d(TAG, "cat spawning");
         }else{
             Log.e(TAG, "cat is null!");
         }
     }
-    public static void triggerCoinIncrement(){
-        Log.d(TAG, "Initializing background coin increment");
-        ShopManager.getInstance().startCoinIncrementTask();
-    }
-
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
 
@@ -181,6 +170,4 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
     public void setPause(boolean paused){
         this.isPaused = paused;
     }
-    //TODO coin increment in background still buggy af
-
 }

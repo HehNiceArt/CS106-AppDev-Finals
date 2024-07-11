@@ -10,6 +10,9 @@ import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.example.nyanyanko.Inventory.InventoryItem;
+import com.example.nyanyanko.Toy.ToyItem;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -44,6 +47,7 @@ public class NyankoAI{
 
     public int hunger = 10;
     public int hp = 10;
+    public int playerCoins = 20;
 
     public enum Mood {
         DEFAULT("GOOD"),

@@ -36,7 +36,7 @@ public class ImageDialog extends Dialog {
                 dismiss();
                 Log.d("ImageDialog", "dismissing image");
             }
-        }, 5000);
+        }, 1000);
     }
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev){

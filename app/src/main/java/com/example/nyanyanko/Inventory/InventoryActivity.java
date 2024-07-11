@@ -1,20 +1,20 @@
-package com.example.nyanyanko;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.nyanyanko.Inventory;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.example.nyanyanko.GameView;
+import com.example.nyanyanko.ImageDialog;
+import com.example.nyanyanko.NyankoAI;
+import com.example.nyanyanko.NyankoManager;
+import com.example.nyanyanko.R;
+
 import java.util.List;
 
 public class InventoryActivity extends Activity implements InventoryAdapter.OnItemInteractionListener{

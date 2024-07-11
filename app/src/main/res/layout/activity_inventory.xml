@@ -8,7 +8,7 @@
     android:padding="16dp"
     android:id="@+id/inventory_layout"
     android:background="#F0F0F0"
-    tools:context=".InventoryActivity">
+    tools:context=".Inventory.InventoryActivity">
 
         <Button
             android:id="@+id/returnBTN"

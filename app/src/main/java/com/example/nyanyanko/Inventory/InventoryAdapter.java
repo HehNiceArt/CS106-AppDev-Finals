@@ -1,4 +1,4 @@
-package com.example.nyanyanko;
+package com.example.nyanyanko.Inventory;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,8 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+import com.example.nyanyanko.R;
 
 import java.util.List;
 

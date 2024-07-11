@@ -1,8 +1,6 @@
 package com.example.nyanyanko;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
+import com.example.nyanyanko.ShopAct.ShopItem;
 
 import java.util.ArrayList;
 import java.util.List;

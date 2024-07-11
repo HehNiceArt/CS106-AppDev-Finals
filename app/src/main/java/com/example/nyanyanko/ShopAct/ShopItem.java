@@ -1,4 +1,4 @@
-package com.example.nyanyanko;
+package com.example.nyanyanko.ShopAct;
 
 public class ShopItem {
     private String name;
