@@ -276,8 +276,7 @@ public class NyankoAI{
     public void fillHunger(int hungerChange){
         int currentHunger = hunger;
        currentHunger += hungerChange;
-       if(currentHunger > 10){
-       }else {
+       if(currentHunger >= 10){
            hunger = 10;
        }
     }
@@ -290,8 +289,7 @@ public class NyankoAI{
     public void fillHP(int hpChange){
         int currentHP = hp;
         currentHP += hpChange;
-        if(currentHP > 10){
-        }else{
+        if(currentHP >= 10){
             hp = 10;
         }
     }
