@@ -22,7 +22,7 @@
             android:name=".ShopAct.ShopActivity"
             android:exported="false" />
         <activity
-            android:name=".Shop"
+            android:name=".ShopAct.Shop"
             android:exported="false" />
         <activity
             android:name=".Inventory.InventoryActivity"

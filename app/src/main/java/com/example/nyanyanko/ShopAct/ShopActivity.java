@@ -2,6 +2,7 @@ package com.example.nyanyanko.ShopAct;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,14 +23,18 @@ import com.example.nyanyanko.Inventory.InventoryItem;
 import com.example.nyanyanko.NyankoAI;
 import com.example.nyanyanko.NyankoManager;
 import com.example.nyanyanko.R;
-import com.example.nyanyanko.Shop;
 import com.example.nyanyanko.Toy.ToyItem;
 
-public class ShopActivity extends AppCompatActivity {
+import java.util.List;
+
+public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInteractionListener {
     private Shop shop;
     private NyankoAI nyankoAI;
     private int playerCoins;
     private Handler handler;
+    private GridView shopGridView;
+    private ShopItemAdapter adapter;
+    private List<ShopItem> shopItems;
     TextView coins;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +43,7 @@ public class ShopActivity extends AppCompatActivity {
 
         nyankoAI = NyankoManager.getInstance(this);
         handler = new Handler();
-        shop = new Shop();
+        shop = new Shop(this);
 
         Intent intent = getIntent();
 
@@ -45,7 +51,7 @@ public class ShopActivity extends AppCompatActivity {
             playerCoins = intent.getIntExtra("playerCoins", 20);
         }
 
-        ListView shopListView = findViewById(R.id.shop_list);
+        shopGridView= findViewById(R.id.shopGrid);
 
         coins = findViewById(R.id.coinID);
         playerCoins = CoinManager.getInstance().getCoins();
@@ -53,17 +59,15 @@ public class ShopActivity extends AppCompatActivity {
         Log.d("ShopAct", "PlayerCoins: " + playerCoins);
         CoinManager.getInstance().startCoinIncrement();
         updateCoinDisplay();
+        updateShopItems();
 
-        ArrayAdapter<ShopItem> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, shop.getShopItems());
-        shopListView.setAdapter(adapter);
-
-        shopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ShopItem item = (ShopItem) parent.getItemAtPosition(position);
-                itemBuy(item);
-            }
-        });
+        //shopGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+         //   @Override
+           // public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+             //   ShopItem item = (ShopItem) parent.getItemAtPosition(position);
+               // itemBuy(item);
+            //}
+        ///});
         Button backBTN = findViewById(R.id.backBTN);
         backBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +76,16 @@ public class ShopActivity extends AppCompatActivity {
             }
 
         });
+    }
+    @Override
+    public void onItemClick(ShopItem item){
+       itemBuy(item);
+       Log.d("ShopAct", "Item bought!");
+    }
+    private void updateShopItems(){
+        shopItems = shop.getShopItems();
+        adapter = new ShopItemAdapter(this, shopItems, this);
+        shopGridView.setAdapter(adapter);
     }
     private void updateCoinDisplay(){
         Handler handler = new Handler();
@@ -139,7 +153,7 @@ public class ShopActivity extends AppCompatActivity {
                 //resId = R.drawable.mouse_plush_icon;
                 break;
             default:
-                //resId = R.drawable.default_item_icon;
+                //resId = R.drawable.empty_icon;
                 break;
         }
         return BitmapFactory.decodeResource(getResources(), resId);
