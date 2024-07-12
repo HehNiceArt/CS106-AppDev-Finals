@@ -1,8 +1,12 @@
 package com.example.nyanyanko.ShopAct;
 
+import android.content.Context;
 import android.util.Log;
 
 import android.os.Handler;
+import android.view.Gravity;
+import android.widget.Toast;
+
 import java.util.logging.LogRecord;
 
 public class CoinManager {
@@ -10,6 +14,7 @@ public class CoinManager {
     private int coins = 20;
     private Handler handler;
     private Runnable coinIncrementTask;
+    private Context context;
 
     private CoinManager(){
         handler = new Handler();
@@ -27,6 +32,9 @@ public class CoinManager {
         }
         return instance;
     }
+    public void setContext(Context context){
+        this.context = context.getApplicationContext();
+    }
     public void startCoinIncrement(){
         handler.postDelayed(coinIncrementTask, 20000);
     }
@@ -35,6 +43,10 @@ public class CoinManager {
     }
     private void increaseCoins(){
         coins += 1;
+        Log.d("CoinManager", "Coins: " + coins);
+    }
+    public void toySum(int plus){
+        coins += plus;
         Log.d("CoinManager", "Coins: " + coins);
     }
     public int decreaseCoins(int cost){

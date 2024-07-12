@@ -110,6 +110,7 @@ public class NyankoAI{
         decreaseHunger(currentTime);
         checkHP();
         checkMood(currentTime);
+        incomeBonus();
     }
 
     //region Inventory
@@ -260,10 +261,8 @@ public class NyankoAI{
     //endregion
     //region Income
     //When playing with Nyanko
+    //TODO 3 coins per interaction with 5 seconds cool down
     public void incomeBonus(){
-
-    }
-    public void toyBonus(){
 
     }
     //endregion

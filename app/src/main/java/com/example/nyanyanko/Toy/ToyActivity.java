@@ -21,6 +21,7 @@ import com.example.nyanyanko.R;
 import com.example.nyanyanko.ShopAct.CoinManager;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ToyActivity extends Activity implements ToyAdapter.OnItemInteractionListener{
 
@@ -50,6 +51,8 @@ public class ToyActivity extends Activity implements ToyAdapter.OnItemInteractio
             }
         });
     }
+    //TODO Mouse plush: +2 coins
+    //TODO Feather: +6 coins
     @Override
     public void onItemClick(ToyItem item){
         int currentQuantity = item.getQuantity();
@@ -57,6 +60,7 @@ public class ToyActivity extends Activity implements ToyAdapter.OnItemInteractio
         if(currentQuantity > 0){
             showImageDialog();
             item.setQuantity(currentQuantity - 1);
+            checkToy(item);
             if(item.getQuantity() == 0){
                 toyItems.remove(item);
                 Toast.makeText(this, item.getName() + " is now empty!", Toast.LENGTH_SHORT).show();
@@ -65,6 +69,17 @@ public class ToyActivity extends Activity implements ToyAdapter.OnItemInteractio
             }
             adapter.notifyDataSetChanged();
         }
+    }
+    private void checkToy(ToyItem item){
+       if(item.getName().equals("Mouse Plush")){
+           int plus = 2;
+           CoinManager.getInstance().toySum(plus);
+           Log.d("ToyAct", "Mouse Plush used!");
+       } else if (item.getName().equals("Feather")){
+           int plus = 6;
+           CoinManager.getInstance().toySum(plus);
+           Log.d("ToyAct", "Feather used!");
+       }
     }
 
     private void showImageDialog() {
