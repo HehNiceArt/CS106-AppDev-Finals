@@ -11,6 +11,7 @@ import android.util.Log;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.nyanyanko.Inventory.InventoryItem;
+import com.example.nyanyanko.ShopAct.CoinManager;
 import com.example.nyanyanko.Toy.ToyItem;
 
 import java.util.ArrayList;
@@ -69,6 +70,9 @@ public class NyankoAI{
     private List<ToyItem> toy;
     Context mcontext;
 
+    private long lastIncomeTime;
+    private final long INCOME_COOLDOWN = 5000;
+
     public NyankoAI(Context context, Bitmap bitmap, int screenWidth, int screenHeight) {
         this.mcontext = context;
         this.bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
@@ -92,6 +96,7 @@ public class NyankoAI{
 
         this.inventory = new ArrayList<>();
         this.toy = new ArrayList<>();
+        this.lastIncomeTime = 0;
     }
 
     public void update() {
@@ -110,7 +115,6 @@ public class NyankoAI{
         decreaseHunger(currentTime);
         checkHP();
         checkMood(currentTime);
-        incomeBonus();
     }
 
     //region Inventory
@@ -219,7 +223,6 @@ public class NyankoAI{
         float deltaY = targetY - y;
         double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-        Log.e(TAG, "Dist" + distance);
 
         if (distance > DEFAULT_SPEED) {
             speedX = (float) (DEFAULT_SPEED * (deltaX / distance) );
@@ -249,6 +252,7 @@ public class NyankoAI{
         if (currentState != State.PLAYFUL) {
             previousState = currentState;
             currentState = State.PLAYFUL;
+            incomeBonus();
             isStatePaused = true;
             statePauseTime = System.currentTimeMillis();
         } else {
@@ -261,9 +265,15 @@ public class NyankoAI{
     //endregion
     //region Income
     //When playing with Nyanko
-    //TODO 3 coins per interaction with 5 seconds cool down
     public void incomeBonus(){
-
+        long currentTime = System.currentTimeMillis();
+        if(currentTime - lastIncomeTime >= INCOME_COOLDOWN){
+            CoinManager.getInstance().toySum(3);
+            Log.d(TAG, "Income bonus!");
+            lastIncomeTime = currentTime;
+        }else{
+            Log.d(TAG, "Income bonus on cooldown");
+        }
     }
     //endregion
     public void draw(Canvas canvas) {

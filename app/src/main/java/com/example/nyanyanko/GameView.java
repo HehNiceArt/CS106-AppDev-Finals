@@ -42,7 +42,6 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
         surfaceCreated(surfaceHolder);
         surfaceHolder.addCallback(this);
 
-        //triggerCoinIncrement();
         setFocusable(true);
     }
 
@@ -94,7 +93,6 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
                 nyankoAI.onTouch();
             }
         }
-        Log.e(TAG, "Touch: " + touchX + " " + touchY);
         return true;
     }
     @Override

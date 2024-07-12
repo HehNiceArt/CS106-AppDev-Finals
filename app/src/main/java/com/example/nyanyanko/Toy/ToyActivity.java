@@ -51,8 +51,6 @@ public class ToyActivity extends Activity implements ToyAdapter.OnItemInteractio
             }
         });
     }
-    //TODO Mouse plush: +2 coins
-    //TODO Feather: +6 coins
     @Override
     public void onItemClick(ToyItem item){
         int currentQuantity = item.getQuantity();
