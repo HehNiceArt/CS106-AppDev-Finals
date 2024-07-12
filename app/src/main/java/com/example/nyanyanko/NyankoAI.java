@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Random;
 
 public class NyankoAI{
+
+
+    private Gameplay gameplay;
     private Bitmap bitmap;
     private int x, y;
     private float speedX, speedY;

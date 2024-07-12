@@ -94,36 +94,50 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="right"
                     android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/toyBTN"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Toys" />
+                        android:layout_width="62dp"
+                        android:layout_height="58dp"
+                        android:background="@android:color/transparent"
+                        android:foreground="@drawable/salvadera"
+                        android:layout_marginRight="10dp"
+                        android:onClick="handleToysBTNClick" />
 
                     <Button
                         android:id="@+id/menuBTN"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Menu" />
+                        android:layout_width="59dp"
+                        android:layout_height="59dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@android:color/transparent"
+                        android:foreground="@drawable/papel"
+                        android:onClick="handleMenuBTNClick" />
                 </LinearLayout>
 
                 <Button
-                    android:id="@+id/shopBTN"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Shop" />
-
-                <Button
                     android:id="@+id/inventoryBTN"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="59dp"
+                    android:layout_height="58dp"
+                    android:background="@android:color/transparent"
+                    android:layout_marginBottom="20dp"
+                    android:foreground="@drawable/backpack"
+                    android:onClick="handleInventoryBTNClick"
                     android:text="Inventory" />
 
-            </LinearLayout>
+                <Button
+                    android:id="@+id/shopBTN"
+                    android:layout_width="67dp"
+                    android:layout_height="67dp"
+                    android:background="@android:color/transparent"
+
+                    android:backgroundTintMode="add"
+                    android:foreground="@drawable/shopping_bag"
+                    android:onClick="handleShopBTNClick" />
+                </LinearLayout>
         </LinearLayout>
 
     </FrameLayout>
