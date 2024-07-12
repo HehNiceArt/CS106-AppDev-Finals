@@ -130,22 +130,22 @@ public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInte
                 resId = R.drawable.wet_food_icon;
                 break;
             case "Tuna":
-                //resId = R.drawable.tunaFood;
+                resId = R.drawable.tuna_food_icon;
                 break;
             case "Shark Costume":
-                //resId = R.drawable.shark_costume_icon;
+                resId = R.drawable.shark_costume_icon;
                 break;
             case "Shrimp Costume":
-                //resId = R.drawable.shrimp_costume_icon;
+                resId = R.drawable.shrimp_costume_icon;
                 break;
             case "Feather":
-                //resId = R.drawable.feather_icon;
+                resId = R.drawable.feather_icon;
                 break;
             case "Mouse Plush":
-                //resId = R.drawable.mouse_plush_icon;
+                resId = R.drawable.mouse_plush_icon;
                 break;
             default:
-                //resId = R.drawable.empty_icon;
+                resId = R.drawable.empty_icon;
                 break;
         }
         return BitmapFactory.decodeResource(getResources(), resId);
