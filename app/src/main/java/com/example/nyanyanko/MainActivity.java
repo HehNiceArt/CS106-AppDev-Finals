@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
         next_Activity_button.setOnClickListener(v ->
         {
-            Intent intent = new Intent(MainActivity.this, Gameplay.class);
+            Intent intent = new Intent(MainActivity.this, Registration.class);
             startActivity(intent);
         });
     }
