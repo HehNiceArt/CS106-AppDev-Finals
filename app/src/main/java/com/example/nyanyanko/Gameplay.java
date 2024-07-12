@@ -23,6 +23,7 @@ public class Gameplay extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gameplay);
+        String petName = getIntent().getStringExtra("PET_NAME");
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("playerCoins")) {
@@ -34,7 +35,7 @@ public class Gameplay extends AppCompatActivity {
         incrementCoins();
 
         FrameLayout frameLayout = findViewById(R.id.act_gameplay);
-        gameView = new GameView(this);
+        gameView = new GameView(this, petName);
         frameLayout.addView(gameView, 0);
 
         openInventoryBTN = findViewById(R.id.inventoryBTN);
@@ -43,7 +44,6 @@ public class Gameplay extends AppCompatActivity {
             public void onClick(View v) {
                 gameView.setPause(true);
                 Intent intent = new Intent(Gameplay.this, InventoryActivity.class);
-                overridePendingTransition(0, 0);
                 startActivityForResult(intent, 1);
             }
         });
@@ -87,13 +87,11 @@ public class Gameplay extends AppCompatActivity {
         gameView.setPause(true);
         Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);
-        overridePendingTransition(0, 0);
     }
     private void openToy(){
         gameView.setPause(true);
         Intent intent = new Intent(this, ToyActivity.class);
         startActivity(intent);
-        overridePendingTransition(0, 0);
     }
 
     private void openShop() {
@@ -101,7 +99,6 @@ public class Gameplay extends AppCompatActivity {
         Intent intent = new Intent(this, ShopActivity.class);
         intent.putExtra("playerCoins", playerCoins);
         startActivity(intent);
-        overridePendingTransition(0, 0);
     }
 
     @Override

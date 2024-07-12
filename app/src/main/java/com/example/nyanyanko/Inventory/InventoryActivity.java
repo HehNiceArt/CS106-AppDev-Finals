@@ -92,6 +92,6 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
     protected void onPause(){
         super.onPause();
         CoinManager.getInstance().stopCoinIncrement();
-        Log.d("InventoryActivity", "Pausing coin increment in InventoryActivity");
+        Log.d("InventoryActivity", "Stopping coin increment in InventoryActivity");
     }
 }

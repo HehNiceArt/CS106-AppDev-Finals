@@ -50,24 +50,16 @@ public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInte
         if (intent != null && intent.hasExtra("playerCoins")) {
             playerCoins = intent.getIntExtra("playerCoins", 20);
         }
-
         shopGridView= findViewById(R.id.shopGrid);
 
         coins = findViewById(R.id.coinID);
         playerCoins = CoinManager.getInstance().getCoins();
-        Log.d("ShopAct", "Starting coin increment in ShopActivity");
         Log.d("ShopAct", "PlayerCoins: " + playerCoins);
-        CoinManager.getInstance().startCoinIncrement();
         updateCoinDisplay();
+        CoinManager.getInstance().startCoinIncrement();
+        Log.d("ShopAct", "Starting coin increment in ShopAct ");
         updateShopItems();
 
-        //shopGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-         //   @Override
-           // public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-             //   ShopItem item = (ShopItem) parent.getItemAtPosition(position);
-               // itemBuy(item);
-            //}
-        ///});
         Button backBTN = findViewById(R.id.backBTN);
         backBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +85,7 @@ public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInte
             @Override
             public void run() {
                 coins.setText(String.valueOf(CoinManager.getInstance().getCoins()));
-                handler.postDelayed(this, 2000);
+                handler.postDelayed(this, 100);
             }
         };
         handler.post(runnable);
