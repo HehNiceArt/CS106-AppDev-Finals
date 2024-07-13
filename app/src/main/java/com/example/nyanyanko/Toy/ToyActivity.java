@@ -31,10 +31,13 @@ public class ToyActivity extends Activity implements ToyAdapter.OnItemInteractio
     private NyankoAI nyankoAI;
     private List<ToyItem> toyItems;
     private Bitmap playing;
+    String petName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_toy);
+
+        petName = getIntent().getStringExtra("PET_NAME");
 
         toyGridView = findViewById(R.id.toyGrid);
         nyankoAI = NyankoManager.getInstance(this);
@@ -89,6 +92,7 @@ public class ToyActivity extends Activity implements ToyAdapter.OnItemInteractio
 
     private void goBack(){
         Intent intent = new Intent(ToyActivity.this, Gameplay.class);
+        intent.putExtra("PET_NAME", petName);
         startActivity(intent);
     }
     private void updateToy(){

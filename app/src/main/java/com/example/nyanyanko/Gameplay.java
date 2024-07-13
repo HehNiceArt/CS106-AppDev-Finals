@@ -19,11 +19,12 @@ public class Gameplay extends AppCompatActivity {
     private GameView gameView;
     private Button openInventoryBTN;
     private int playerCoins;
+    String petName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gameplay);
-        String petName = getIntent().getStringExtra("PET_NAME");
+        petName = getIntent().getStringExtra("PET_NAME");
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("playerCoins")) {
@@ -44,6 +45,7 @@ public class Gameplay extends AppCompatActivity {
             public void onClick(View v) {
                 gameView.setPause(true);
                 Intent intent = new Intent(Gameplay.this, InventoryActivity.class);
+                intent.putExtra("PET_NAME", petName);
                 startActivityForResult(intent, 1);
             }
         });
@@ -86,11 +88,13 @@ public class Gameplay extends AppCompatActivity {
     private void openMenu(){
         gameView.setPause(true);
         Intent intent = new Intent(this, MenuActivity.class);
+        intent.putExtra("PET_NAME", petName);
         startActivity(intent);
     }
     private void openToy(){
         gameView.setPause(true);
         Intent intent = new Intent(this, ToyActivity.class);
+        intent.putExtra("PET_NAME", petName);
         startActivity(intent);
     }
 
@@ -98,6 +102,7 @@ public class Gameplay extends AppCompatActivity {
         gameView.setPause(true);
         Intent intent = new Intent(this, ShopActivity.class);
         intent.putExtra("playerCoins", playerCoins);
+        intent.putExtra("PET_NAME", petName);
         startActivity(intent);
     }
 

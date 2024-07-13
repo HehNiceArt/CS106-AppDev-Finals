@@ -29,6 +29,7 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
     private List<InventoryItem> inventoryItems;
     private GameView gameView;
     private Bitmap eating;
+    String petName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
         setContentView(R.layout.activity_inventory);
 
         inventoryGridView= findViewById(R.id.inventoryGrid);
+        petName = getIntent().getStringExtra("PET_NAME");
 
         nyankoAI = NyankoManager.getInstance(this);
         CoinManager.getInstance().startCoinIncrement();
@@ -53,6 +55,7 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
     }
     private void goBack(){
         Intent intent = new Intent(InventoryActivity.this, Gameplay.class);
+        intent.putExtra("PET_NAME", petName);
         startActivity(intent);
     }
     private void updateInventory(){

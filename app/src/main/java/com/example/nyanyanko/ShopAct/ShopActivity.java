@@ -36,6 +36,7 @@ public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInte
     private ShopItemAdapter adapter;
     private List<ShopItem> shopItems;
     TextView coins;
+    String petName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +47,7 @@ public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInte
         shop = new Shop(this);
 
         Intent intent = getIntent();
+        petName = getIntent().getStringExtra("PET_NAME");
 
         if (intent != null && intent.hasExtra("playerCoins")) {
             playerCoins = intent.getIntExtra("playerCoins", 20);
@@ -55,6 +57,7 @@ public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInte
         coins = findViewById(R.id.coinID);
         playerCoins = CoinManager.getInstance().getCoins();
         Log.d("ShopAct", "PlayerCoins: " + playerCoins);
+
         updateCoinDisplay();
         CoinManager.getInstance().startCoinIncrement();
         Log.d("ShopAct", "Starting coin increment in ShopAct ");
@@ -93,6 +96,7 @@ public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInte
     private void goBack(){
         Intent intent = new Intent(ShopActivity.this, Gameplay.class);
         intent.putExtra("playerCoins", playerCoins);
+        intent.putExtra("PET_NAME", petName);
         startActivity(intent);
     }
 
