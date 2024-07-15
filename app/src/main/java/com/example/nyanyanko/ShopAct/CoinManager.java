@@ -36,7 +36,7 @@ public class CoinManager {
         this.context = context.getApplicationContext();
     }
     public void startCoinIncrement(){
-        handler.postDelayed(coinIncrementTask, 20000);
+        handler.postDelayed(coinIncrementTask, 13000);
     }
     public void stopCoinIncrement(){
         handler.removeCallbacks(coinIncrementTask);
