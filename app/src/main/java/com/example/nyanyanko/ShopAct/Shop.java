@@ -25,7 +25,7 @@ public class Shop {
         shopItems.add(new ShopItem("Feather", 3, 0, 10, getItemIcon(context, "Feather")));
 
         shopItems.add(new ShopItem("Shark Costume", 0, 0, 25, getItemIcon(context, "Shark Costume")));
-        shopItems.add(new ShopItem("Shrimp Costume", 0, 0, 4, getItemIcon(context, "Shrimp Costume")));
+        shopItems.add(new ShopItem("Shrimp Costume", 0, 0, 40, getItemIcon(context, "Shrimp Costume")));
     }
     private Bitmap getItemIcon(Context context, String itemName){
         int resId = 0;
