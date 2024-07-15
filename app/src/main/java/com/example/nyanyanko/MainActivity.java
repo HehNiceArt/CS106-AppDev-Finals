@@ -27,13 +27,10 @@ public class MainActivity extends AppCompatActivity {
         next_Activity_button.startAnimation(blinkAnim);
 
         setBG();
-        next_Activity_button.setOnClickListener(v ->
-        {
+        next_Activity_button.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, Registration.class);
             startActivity(intent);
         });
-
-
     }
     private void setBG(){
         DisplayMetrics displayMetrics = new DisplayMetrics();

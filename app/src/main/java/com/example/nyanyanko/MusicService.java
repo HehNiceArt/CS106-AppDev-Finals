@@ -21,6 +21,7 @@ public class MusicService extends Service {
     public void onCreate() {
         super.onCreate();
         mediaPlayer = MediaPlayer.create(this, R.raw.bgm);
+        Log.d("Music", "starting music");
         mediaPlayer.setLooping(true);
     }
 

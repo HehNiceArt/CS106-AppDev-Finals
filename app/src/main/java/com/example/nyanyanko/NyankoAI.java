@@ -282,16 +282,12 @@ public class NyankoAI{
     public void draw(Canvas canvas) {
         canvas.drawBitmap(bitmap, x, y, new Paint());
     }
-    public int getHunger() {
-        return hunger;
-    }
-    public void fillHunger(int hungerChange){
-        int currentHunger = hunger;
-       currentHunger += hungerChange;
-       Log.d(TAG, "Current Hunger: " + currentHunger);
-       if(currentHunger >= 10){
-           hunger = 10;
-       }
+    public void fillHunger(int hungerChange) {
+        hunger += hungerChange;
+        if(hunger > 10){
+            hunger = 10;
+        }
+        Log.d(TAG, "Current Hunger: " + hunger);
     }
     public void checkHP(){
         if(hp <= 0){
@@ -319,6 +315,9 @@ public class NyankoAI{
             }
         });
     }
+    public int getHunger() {
+        return hunger;
+    }
     public int getHP() {
         return hp;
     }
@@ -331,4 +330,3 @@ public class NyankoAI{
         this.currentMood = mood;
     }
 }
-
