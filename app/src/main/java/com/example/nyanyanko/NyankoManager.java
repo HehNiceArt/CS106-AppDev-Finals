@@ -11,7 +11,7 @@ public class NyankoManager {
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.nyanko);
         if(nyankoAIInstance == null){
             Bitmap resized = Bitmap.createScaledBitmap(bitmap, 240, 240, false);
-            nyankoAIInstance = new NyankoAI(resized, bitmap.getWidth(), bitmap.getHeight());
+            nyankoAIInstance = new NyankoAI(context, resized, bitmap.getWidth(), bitmap.getHeight());
         }
         return nyankoAIInstance;
     }

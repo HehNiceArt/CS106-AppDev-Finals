@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context=".ShopActivity">
-    <LinearLayout
+    tools:context=".ShopAct.ShopActivity">
+
+    <ImageView
+        android:id="@+id/backgroundImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:src="@drawable/sho_bg"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/background_image" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
@@ -20,16 +28,18 @@
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/btn_star_big_on" />
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:src="@android:drawable/btn_star_big_on" />
 
             <TextView
                 android:id="@+id/coinID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_margin="10dp"
                 android:textSize="24sp"
-                android:text="50" />
+                android:text="" />
 
             <Button
                 android:id="@+id/backBTN"
@@ -39,11 +49,18 @@
                 android:text="BACK" />
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/shop_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <GridView
+            android:id="@+id/shopGrid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:numColumns="auto_fit"
+            android:columnWidth="100dp"
+            android:layout_marginTop="10dp"
+            android:horizontalSpacing="10dp"
+            android:verticalSpacing="10dp"
+            android:stretchMode="columnWidth"
+            android:gravity="center"/>
 
     </LinearLayout>
 
-</LinearLayout>
+</FrameLayout>

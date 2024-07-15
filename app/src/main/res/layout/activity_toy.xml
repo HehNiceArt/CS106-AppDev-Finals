@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:padding="16dp"
-    android:background="#F0F0F0"
     android:layout_height="match_parent"
-    tools:context=".ToyActivity">
+    tools:context=".Toy.ToyActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:src="@drawable/toy_bg"
+        android:scaleType="centerCrop"
+        android:layout_height="match_parent"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="10dp"
         android:orientation="vertical">
 
         <Button
@@ -20,10 +25,16 @@
             android:layout_height="wrap_content"
             android:text="BACK" />
 
-        <ListView
+        <GridView
+            android:id="@+id/toyGrid"
             android:layout_width="match_parent"
-            android:id="@+id/toyList"
+            android:numColumns="auto_fit"
+            android:columnWidth="100dp"
+            android:horizontalSpacing="10dp"
+            android:verticalSpacing="10dp"
+            android:stretchMode="columnWidth"
+            android:gravity="center"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-</LinearLayout>
+</FrameLayout>

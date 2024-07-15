@@ -1,13 +1,12 @@
-package com.example.nyanyanko;
+package com.example.nyanyanko.Toy;
 
 import android.graphics.Bitmap;
 
-public class InventoryItem {
+public class ToyItem {
     private String name;
     private int quantity;
     private Bitmap icon;
-
-    public InventoryItem(String name, int quantity, Bitmap itemIcon){
+    public ToyItem(String name, int quantity, Bitmap itemIcon) {
         this.name = name;
         this.quantity = quantity;
         this.icon = itemIcon;

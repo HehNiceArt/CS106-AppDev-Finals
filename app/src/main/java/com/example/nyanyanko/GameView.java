@@ -11,32 +11,36 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 
+import com.example.nyanyanko.ShopAct.ShopActivity;
+
 import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 
-public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Callback {
+public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Callback{
 
     private static final String TAG = "GameView";
     private NyankoAI nyankoAI;
+    private Gameplay gameplay;
+    private ShopActivity shopActivity;
     private Thread gameThread = null;
     private boolean isPlaying;
     private SurfaceHolder surfaceHolder;
     private Bitmap background;
     private int screenWidth;
     private int screenHeight;
-
-    public int initialX, initialY;
+    private Handler handler;
+    private String petName;
 
     public boolean isPaused;
-    public GameView(Context context){
+    public GameView(Context context, String petName){
         super(context);
         surfaceHolder = getHolder();
+        this.petName = petName;
 
+        shopActivity = new ShopActivity();
         surfaceCreated(surfaceHolder);
         surfaceHolder.addCallback(this);
 
@@ -55,9 +59,9 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
         Bitmap nyankoBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.nyanko);
         background = BitmapFactory.decodeResource(getResources(), R.drawable.gameviewbg);
 
+        gameplay = new Gameplay();
         if(nyankoBitmap != null){
             nyankoAI = NyankoManager.getInstance(getContext());
-            Log.d(TAG, "cat spawning");
         }else{
             Log.e(TAG, "cat is null!");
         }
@@ -91,7 +95,6 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
                 nyankoAI.onTouch();
             }
         }
-        Log.e(TAG, "Touch: " + touchX + " " + touchY);
         return true;
     }
     @Override
@@ -128,15 +131,19 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
     }
+
     public void displayText(Canvas canvas){
         NyankoAI.Mood initialMood = nyankoAI.getMood();
 
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setTextSize(50);
-        canvas.drawText("HP: " + nyankoAI.getHP() +"/10", 20, 100, paint);
-        canvas.drawText("Hunger: " + nyankoAI.getHunger() +"/10", 20, 150, paint);
-        canvas.drawText("Mood: " + initialMood.getMoodString(),20, 200, paint);
+        int _x = 20;
+        int _y = 100;
+        canvas.drawText(petName +"", _x, _y, paint);
+        canvas.drawText("HP: " + nyankoAI.getHP() +"/10", _x, _y + 100, paint);
+        canvas.drawText("Hunger: " + nyankoAI.getHunger() +"/10", _x, _y + 150, paint);
+        canvas.drawText("Mood: " + initialMood.getMoodString(),_x, _y + 200, paint);
     }
     private void control() {
         try{

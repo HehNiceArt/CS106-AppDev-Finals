@@ -1,22 +1,29 @@
 package com.example.nyanyanko;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
 
+import androidx.appcompat.app.AlertDialog;
+
+import com.example.nyanyanko.Inventory.InventoryItem;
+import com.example.nyanyanko.ShopAct.CoinManager;
+import com.example.nyanyanko.Toy.ToyItem;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class NyankoAI {
+public class NyankoAI{
 
-    //Hello layout branch!!
 
     private Gameplay gameplay;
     private Bitmap bitmap;
-    private int x,y;
+    private int x, y;
     private float speedX, speedY;
     private int screenWidth, screenHeight;
     private Random random;
@@ -33,17 +40,20 @@ public class NyankoAI {
 
     private int targetX, targetY;
 
-    private enum State{
+    private enum State {
         WALKING,
         IDLE,
         PLAYFUL
     }
+
     private State currentState;
     private State previousState;
 
     public int hunger = 10;
     public int hp = 10;
-    public enum Mood{
+    public int playerCoins = 20;
+
+    public enum Mood {
         DEFAULT("GOOD"),
         SAD("SAD"),
         ANGRY("ANGRY");
@@ -57,179 +67,195 @@ public class NyankoAI {
             return moodString;
         }
     }
+
     private Mood currentMood = Mood.DEFAULT;
     private List<InventoryItem> inventory;
     private List<ToyItem> toy;
-    public NyankoAI(Bitmap bitmap, int screenWidth, int screenHeight)
-   {
-      this.bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-      this.x = screenWidth;
-      this.y = screenHeight;
+    Context mcontext;
 
-      this.screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
-      this.screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+    private long lastIncomeTime;
+    private final long INCOME_COOLDOWN = 5000;
 
-      this.speedX = DEFAULT_SPEED;
-      this.speedY = DEFAULT_SPEED;
+    public NyankoAI(Context context, Bitmap bitmap, int screenWidth, int screenHeight) {
+        this.mcontext = context;
+        this.bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        this.x = screenWidth;
+        this.y = screenHeight;
 
-      this.random = new Random();
+        this.screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+        this.screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
 
-      this.currentState = State.WALKING;
-      this.lastStateChangeTime = System.currentTimeMillis();
-      this.isStatePaused = false;
+        this.speedX = DEFAULT_SPEED;
+        this.speedY = DEFAULT_SPEED;
 
-      this.hpTime = System.currentTimeMillis();
-      this.hungerTime = System.currentTimeMillis();
+        this.random = new Random();
 
-      this.inventory = new ArrayList<>();
-      this.toy = new ArrayList<>();
-   }
+        this.currentState = State.WALKING;
+        this.lastStateChangeTime = System.currentTimeMillis();
+        this.isStatePaused = false;
 
-   public void update(){
+        this.hpTime = System.currentTimeMillis();
+        this.hungerTime = System.currentTimeMillis();
+
+        this.inventory = new ArrayList<>();
+        this.toy = new ArrayList<>();
+        this.lastIncomeTime = 0;
+    }
+
+    public void update() {
         long currentTime = System.currentTimeMillis();
         long stateDuration = (currentState == State.WALKING) ? WALKING_DURATION : IDLE_DURATION;
-        if(currentTime - lastStateChangeTime > stateDuration){
+        if (currentTime - lastStateChangeTime > stateDuration) {
             switchState();
             lastStateChangeTime = currentTime;
         }
-        if(currentState == State.WALKING){
+        if (currentState == State.WALKING) {
             walking();
         } else if (currentState == State.PLAYFUL) {
-           moveToTarget();
+            moveToTarget();
         }
 
         decreaseHunger(currentTime);
-        checkHealth();
+        checkHP();
         checkMood(currentTime);
-   }
-   //region Inventory
-    public List<InventoryItem> getInventory(){
+    }
+
+    //region Inventory
+    public List<InventoryItem> getInventory() {
         return inventory;
     }
-    public void addItemToInventory(InventoryItem item){
-        for(InventoryItem invItem : inventory){
-           if(invItem.getName().equals(item.getName())){
-               invItem.setQuantity(invItem.getQuantity() + 1);
-               Log.d(TAG, "Update quantity of " + item.getName());
-               return;
-           }
+
+    public void addItemToInventory(InventoryItem item) {
+        for (InventoryItem invItem : inventory) {
+            if (invItem.getName().equals(item.getName())) {
+                invItem.setQuantity(invItem.getQuantity() + 1);
+                Log.d(TAG, "Update quantity of " + item.getName());
+                return;
+            }
         }
         inventory.add(item);
         Log.d(TAG, "Add item " + item.getName());
     }
-    public List<ToyItem> getToy(){
+
+    public List<ToyItem> getToy() {
         return toy;
     }
+
     public void addItemToToy(ToyItem item) {
-        for(ToyItem toyItem : toy){
-            if(toyItem.getName().equals(item.getName())){
+        for (ToyItem toyItem : toy) {
+            if (toyItem.getName().equals(item.getName())) {
                 toyItem.setQuantity((toyItem.getQuantity() + 1));
                 return;
             }
         }
         toy.add(item);
     }
+
     //endregion
-   //region Stats
-   private void decreaseHunger(long currentTime){
-        if(currentTime - hungerTime> 60000){
+    //region Stats
+    private void decreaseHunger(long currentTime) {
+        if (currentTime - hungerTime > 60000) {
             hunger--;
-            if(hunger >= 0){
-                hungerTime= currentTime;
-            }else{
+            if (hunger >= 0) {
+                hungerTime = currentTime;
+            } else {
                 hunger = 0;
             }
         }
-   }
-    private void decreaseHP(long currentTime){
-        if(currentTime - hpTime> 120000){
+    }
+
+    private void decreaseHP(long currentTime) {
+        if (currentTime - hpTime > 120000) {
             hp--;
-            if(hp>= 0){
-                hpTime= currentTime;
-            }else{
+            if (hp >= 0) {
+                hpTime = currentTime;
+            } else {
                 hp = 0;
             }
         }
     }
-   private void checkHealth(){
-        if(hp <= 0){
-            //have a pop up and say game over
-        }
-   }
-   private void checkMood(long currentTIme){
-        if(hunger <= 5 && hunger >= 3){
+
+    private void checkMood(long currentTIme) {
+        if (hunger <= 5 && hunger >= 3) {
             decreaseHP(currentTIme);
             setMood(Mood.SAD);
-        } else if (hunger <= 3 && hunger >= 0 ){
+        } else if (hunger <= 3 && hunger >= 0) {
             decreaseHP(currentTIme);
-           setMood(Mood.ANGRY);
+            setMood(Mood.ANGRY);
+        } else{
+            setMood(Mood.DEFAULT);
         }
-   }
-   //endregion
+    }
+
+    //endregion
     //region Behavior trees
-    private void switchState(){
-        if(currentState == State.WALKING){
+    private void switchState() {
+        if (currentState == State.WALKING) {
             currentState = State.IDLE;
-        }else if (currentState == State.IDLE){
+        } else if (currentState == State.IDLE) {
             currentState = State.WALKING;
             changeWalkingDirection();
         } else if (currentState == State.PLAYFUL) {
             currentState = previousState == State.IDLE ? State.PLAYFUL : State.WALKING;
-            if(currentState == State.WALKING){
+            if (currentState == State.WALKING) {
                 changeWalkingDirection();
             }
         }
     }
-    private void changeWalkingDirection(){
+
+    private void changeWalkingDirection() {
         double angle = random.nextDouble() * 2 * Math.PI;
-        speedX = (float) (DEFAULT_SPEED* Math.cos(angle));
-        speedY = (float) (DEFAULT_SPEED* Math.sin(angle));
+        speedX = (float) (DEFAULT_SPEED * Math.cos(angle));
+        speedY = (float) (DEFAULT_SPEED * Math.sin(angle));
     }
 
-   public void walking(){
-       x += speedX;
-       y += speedY;
+    public void walking() {
+        x += speedX;
+        y += speedY;
 
-       if(x <= 0 || x + bitmap.getWidth() >= screenWidth){
-           speedX = -speedX;
-       }
-       if(y <= 0 || y + bitmap.getHeight()>= screenHeight){
-           speedY = -speedY;
-       }
-   }
-   private void moveToTarget(){
-       float deltaX = targetX - x;
-       float deltaY = targetY - y;
-       double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        if (x <= 0 || x + bitmap.getWidth() >= screenWidth) {
+            speedX = -speedX;
+        }
+        if (y <= 0 || y + bitmap.getHeight() >= screenHeight) {
+            speedY = -speedY;
+        }
+    }
 
-       Log.e(TAG, "Dist" + distance);
+    private void moveToTarget() {
+        float deltaX = targetX - x;
+        float deltaY = targetY - y;
+        double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-       if(distance > DEFAULT_SPEED){
-           speedX = (float) (DEFAULT_SPEED * (deltaX / distance));
-           speedY = (float) (DEFAULT_SPEED * (deltaY / distance));
-           x += speedX;
-           y += speedY;
-       }else {
-           x = targetX;
-           y = targetY;
 
-           isStatePaused = false;
-           lastStateChangeTime = System.currentTimeMillis();
-           currentState = State.IDLE;
-       }
-   }
-   public boolean isTouched(int touchX, int touchY){
-       return touchX >= x && touchX <= (x + bitmap.getWidth()) && touchY >= y && touchY <= (y + bitmap.getHeight());
-   }
-    public void lastPoint(int touchX, int touchY){
+        if (distance > DEFAULT_SPEED) {
+            speedX = (float) (DEFAULT_SPEED * (deltaX / distance) );
+            speedY = (float) (DEFAULT_SPEED * (deltaY / distance) );
+            x += speedX;
+            y += speedY;
+        } else {
+            x = targetX;
+            y = targetY;
+
+            isStatePaused = false;
+            lastStateChangeTime = System.currentTimeMillis();
+            currentState = State.IDLE;
+        }
+    }
+
+    public boolean isTouched(int touchX, int touchY) {
+        return touchX >= x && touchX <= (x + bitmap.getWidth()) && touchY >= y && touchY <= (y + bitmap.getHeight());
+    }
+
+    public void lastPoint(int touchX, int touchY) {
         targetX = touchX;
         targetY = touchY;
     }
 
-    public void onTouch(){
+    public void onTouch() {
         if (currentState != State.PLAYFUL) {
             previousState = currentState;
             currentState = State.PLAYFUL;
+            incomeBonus();
             isStatePaused = true;
             statePauseTime = System.currentTimeMillis();
         } else {
@@ -238,20 +264,68 @@ public class NyankoAI {
             lastStateChangeTime = System.currentTimeMillis() - (statePauseTime - lastStateChangeTime); // Adjust state change time
         }
     }
-    //endregion
-   public void draw(Canvas canvas){
-           canvas.drawBitmap(bitmap, x, y,new Paint());
-   }
 
-   public int getHunger(){
+    //endregion
+    //region Income
+    //When playing with Nyanko
+    public void incomeBonus(){
+        long currentTime = System.currentTimeMillis();
+        if(currentTime - lastIncomeTime >= INCOME_COOLDOWN){
+            CoinManager.getInstance().toySum(3);
+            Log.d(TAG, "Income bonus!");
+            lastIncomeTime = currentTime;
+        }else{
+            Log.d(TAG, "Income bonus on cooldown");
+        }
+    }
+    //endregion
+    public void draw(Canvas canvas) {
+        canvas.drawBitmap(bitmap, x, y, new Paint());
+    }
+    public int getHunger() {
         return hunger;
-   }
-   public int getHP(){
+    }
+    public void fillHunger(int hungerChange){
+        int currentHunger = hunger;
+       currentHunger += hungerChange;
+       if(currentHunger >= 10){
+           hunger = 10;
+       }
+    }
+    public void checkHP(){
+        if(hp <= 0){
+            showGameOverDialog();
+            Log.d(TAG, "Showing game over dialog");
+        }
+    }
+    public void fillHP(int hpChange){
+        int currentHP = hp;
+        currentHP += hpChange;
+        if(currentHP >= 10){
+            hp = 10;
+        }
+    }
+    private void showGameOverDialog() {
+        ((Activity) mcontext).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(mcontext);
+                builder.setTitle("Game Over");
+                builder.setMessage("Nyanko's health has dropped to 0. Game over!");
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+    }
+    public int getHP() {
         return hp;
-   }
-   public Mood getMood(){
+    }
+
+    public Mood getMood() {
         return currentMood;
-   }
+    }
+
     public void setMood(Mood mood) {
         this.currentMood = mood;
     }
