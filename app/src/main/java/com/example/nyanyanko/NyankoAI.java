@@ -154,7 +154,7 @@ public class NyankoAI{
     //endregion
     //region Stats
     private void decreaseHunger(long currentTime) {
-        if (currentTime - hungerTime > 60000) {
+        if (currentTime - hungerTime > 20000) {
             hunger--;
             if (hunger >= 0) {
                 hungerTime = currentTime;
@@ -165,7 +165,7 @@ public class NyankoAI{
     }
 
     private void decreaseHP(long currentTime) {
-        if (currentTime - hpTime > 120000) {
+        if (currentTime - hpTime > 60000) {
             hp--;
             if (hp >= 0) {
                 hpTime = currentTime;
@@ -288,6 +288,7 @@ public class NyankoAI{
     public void fillHunger(int hungerChange){
         int currentHunger = hunger;
        currentHunger += hungerChange;
+       Log.d(TAG, "Current Hunger: " + currentHunger);
        if(currentHunger >= 10){
            hunger = 10;
        }
