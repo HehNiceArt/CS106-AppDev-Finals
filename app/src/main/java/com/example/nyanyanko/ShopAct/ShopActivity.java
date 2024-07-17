@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +42,6 @@ public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop);
 
-        nyankoAI = NyankoManager.getInstance(this);
         handler = new Handler();
         shop = new Shop(this);
 
@@ -53,6 +53,7 @@ public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInte
         }
         shopGridView= findViewById(R.id.shopGrid);
 
+        nyankoAI = NyankoManager.getExistingInstance();
         coins = findViewById(R.id.coinID);
         playerCoins = CoinManager.getInstance().getCoins();
         Log.d("ShopAct", "PlayerCoins: " + playerCoins);
@@ -68,7 +69,6 @@ public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInte
             public void onClick(View view){
                 goBack();
             }
-
         });
     }
 
@@ -96,9 +96,9 @@ public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInte
         Intent intent = new Intent(ShopActivity.this, Gameplay.class);
         intent.putExtra("playerCoins", playerCoins);
         intent.putExtra("PET_NAME", petName);
+        NyankoManager.releaseInstance();
         startActivity(intent);
     }
-
     private void itemBuy(ShopItem item){
         if(playerCoins >= item.getCost()){
             playerCoins = CoinManager.getInstance().decreaseCoins(item.getCost());

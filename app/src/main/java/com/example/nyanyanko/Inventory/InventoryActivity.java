@@ -39,7 +39,7 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
         inventoryGridView= findViewById(R.id.inventoryGrid);
         petName = getIntent().getStringExtra("PET_NAME");
 
-        nyankoAI = NyankoManager.getInstance(this);
+        nyankoAI = NyankoManager.getExistingInstance();
         CoinManager.getInstance().startCoinIncrement();
         Log.d("InventoryActivity", "Starting coin increment in InventoryActivity");
 
@@ -56,6 +56,7 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
     private void goBack(){
         Intent intent = new Intent(InventoryActivity.this, Gameplay.class);
         intent.putExtra("PET_NAME", petName);
+        NyankoManager.releaseInstance();
         startActivity(intent);
     }
     private void updateInventory(){
@@ -66,10 +67,10 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
     @Override
     public void onItemClick(InventoryItem item){
         int currentQuantity = item.getQuantity();
-        eating = BitmapFactory.decodeResource(getResources(), R.drawable.nyanko);
+        eating = BitmapFactory.decodeResource(getResources(), R.drawable.splash_eating);
         int hungerVal = item.getHunger();
         int hpVal = item.getHp();
-        Log.d("Inventory", "hunger " + hungerVal);
+        Log.d("Inventory", item.getName() + ", hungerVal: " + hungerVal);
 
         if(currentQuantity > 0){
             showImageDialog();
@@ -78,9 +79,6 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
             item.setQuantity(currentQuantity - 1);
             if(item.getQuantity() == 0){
                 inventoryItems.remove(item);
-                Toast.makeText(this, item.getName() + " is now empty", Toast.LENGTH_SHORT).show();
-            }else{
-                Toast.makeText(this, "Used one" + item.getName() + " x " + item.getQuantity(), Toast.LENGTH_SHORT).show();
             }
             adapter.notifyDataSetChanged();
         }

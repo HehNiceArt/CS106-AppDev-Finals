@@ -20,13 +20,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent musicIntent = new Intent(this, MusicService.class);
+        startService(musicIntent);
         Button next_Activity_button = (Button) findViewById(R.id.first_activity_button);
         Animation blinkAnim = AnimationUtils.loadAnimation(this, R.anim.blink);
         next_Activity_button.startAnimation(blinkAnim);
 
         setBG();
-        next_Activity_button.setOnClickListener(v ->
-        {
+        next_Activity_button.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, Registration.class);
             startActivity(intent);
         });

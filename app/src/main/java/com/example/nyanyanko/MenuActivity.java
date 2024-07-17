@@ -19,7 +19,6 @@ public class MenuActivity extends AppCompatActivity {
 
         petName = getIntent().getStringExtra("PET_NAME");
         backBTN = findViewById(R.id.backBTN);
-        Log.d("MenuActivity", "at menuActivity");
         backBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -30,6 +29,7 @@ public class MenuActivity extends AppCompatActivity {
     private void goBack(){
         Intent intent = new Intent(MenuActivity.this, Gameplay.class);
         intent.putExtra("PET_NAME", petName);
+        NyankoManager.releaseInstance();
         startActivity(intent);
     }
 }

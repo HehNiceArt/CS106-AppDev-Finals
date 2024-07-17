@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.nyanyanko.Gameplay;
@@ -39,9 +40,10 @@ public class ToyActivity extends Activity implements ToyAdapter.OnItemInteractio
 
         petName = getIntent().getStringExtra("PET_NAME");
 
+        Bitmap nyankoBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.nyanko);
         toyGridView = findViewById(R.id.toyGrid);
-        nyankoAI = NyankoManager.getInstance(this);
 
+        nyankoAI = NyankoManager.getExistingInstance();
         CoinManager.getInstance().startCoinIncrement();
         Log.d("ToyActivity", "Starting coin increment in ToyActivity");
 
@@ -57,7 +59,7 @@ public class ToyActivity extends Activity implements ToyAdapter.OnItemInteractio
     @Override
     public void onItemClick(ToyItem item){
         int currentQuantity = item.getQuantity();
-        playing = BitmapFactory.decodeResource(getResources(), R.drawable.nyanko);
+        playing = BitmapFactory.decodeResource(getResources(), R.drawable.splash_playing);
         if(currentQuantity > 0){
             showImageDialog();
             item.setQuantity(currentQuantity - 1);
@@ -93,6 +95,7 @@ public class ToyActivity extends Activity implements ToyAdapter.OnItemInteractio
     private void goBack(){
         Intent intent = new Intent(ToyActivity.this, Gameplay.class);
         intent.putExtra("PET_NAME", petName);
+        NyankoManager.releaseInstance();
         startActivity(intent);
     }
     private void updateToy(){
