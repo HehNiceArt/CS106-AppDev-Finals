@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.widget.ImageView;
 
-import androidx.annotation.Nullable;
 
 public class NyankoManager {
     private static NyankoAI nyankoAIInstance;
