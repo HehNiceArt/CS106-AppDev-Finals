@@ -1,5 +1,7 @@
 package com.example.nyanyanko;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
@@ -17,6 +19,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.example.nyanyanko.Inventory.InventoryItem;
+import com.example.nyanyanko.SFX.Catmeow;
+import com.example.nyanyanko.SFX.NyankoSFX;
 import com.example.nyanyanko.ShopAct.CoinManager;
 import com.example.nyanyanko.Toy.ToyItem;
 
@@ -25,7 +29,7 @@ import java.util.List;
 import java.util.Random;
 import android.os.Handler;
 
-public class NyankoAI{
+public class NyankoAI extends AppCompatActivity{
 
 
     private Gameplay gameplay;
@@ -60,6 +64,8 @@ public class NyankoAI{
 
     public int hunger = 10;
     public int hp = 10;
+    public int playerCoins = 20;
+    private MusicService musicService;
 
     public enum Mood {
         DEFAULT("GOOD"),
@@ -87,6 +93,7 @@ public class NyankoAI{
     private ImageView imageView;
     private Bitmap walkingBitmap;
     private Bitmap idleBitmap;
+    private Catmeow nyankoSFX;
 
     public NyankoAI(Context context, Bitmap bitmap, int screenWidth, int screenHeight, ImageView imageView) {
         this.imageView = imageView;
@@ -100,6 +107,8 @@ public class NyankoAI{
 
         this.speedX = DEFAULT_SPEED;
         this.speedY = DEFAULT_SPEED;
+
+        nyankoSFX = new Catmeow();
 
         this.random = new Random();
 
@@ -320,9 +329,12 @@ public class NyankoAI{
     public void incomeBonus(){
         long currentTime = System.currentTimeMillis();
         if(currentTime - lastIncomeTime >= INCOME_COOLDOWN){
+
             CoinManager.getInstance().toySum(3);
+            nyankoSFX.startPeriodicSfx();
             Log.d(TAG, "Income bonus!");
             lastIncomeTime = currentTime;
+
         }else{
             Log.d(TAG, "Income bonus on cooldown");
         }

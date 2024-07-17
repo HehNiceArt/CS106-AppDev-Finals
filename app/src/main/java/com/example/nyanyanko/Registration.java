@@ -33,6 +33,7 @@ public class Registration extends AppCompatActivity {
                 intent.putExtra("PET_NAME", petName);
                 startActivity(intent);
             }
+
         });
     }
 
