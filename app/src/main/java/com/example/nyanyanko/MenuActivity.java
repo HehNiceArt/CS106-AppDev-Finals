@@ -19,6 +19,7 @@ public class MenuActivity extends AppCompatActivity {
 
         petName = getIntent().getStringExtra("PET_NAME");
         backBTN = findViewById(R.id.backBTN);
+        Log.d("MenuActivity", "at menuActivity");
         backBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

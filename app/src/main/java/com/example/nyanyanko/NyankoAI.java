@@ -9,7 +9,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Looper;
 import android.util.Log;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -24,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import android.os.Handler;
+import android.widget.ImageView;
 
 public class NyankoAI{
 
@@ -60,6 +60,7 @@ public class NyankoAI{
 
     public int hunger = 10;
     public int hp = 10;
+    public int playerCoins = 20;
 
     public enum Mood {
         DEFAULT("GOOD"),
@@ -88,8 +89,7 @@ public class NyankoAI{
     private Bitmap walkingBitmap;
     private Bitmap idleBitmap;
 
-    public NyankoAI(Context context, Bitmap bitmap, int screenWidth, int screenHeight, ImageView imageView) {
-        this.imageView = imageView;
+    public NyankoAI(Context context, Bitmap bitmap, int screenWidth, int screenHeight) {
         this.mcontext = context;
         this.bitmap = Bitmap.createScaledBitmap(bitmap, 240, 240, false);
         this.x = screenWidth;

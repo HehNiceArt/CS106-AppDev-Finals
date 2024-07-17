@@ -68,7 +68,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
 
         if(this.imageView != null) {
             Glide.with(this).asGif().load(R.drawable.walking_default_right).into(this.imageView);
-            nyankoAI = NyankoManager.getInstance(getContext(),bit,imageView);
+            nyankoAI = NyankoManager.getInstance(getContext());
             Log.d("GameVIew", "NyankoAI calling nyankoManager!");
         }
     }
