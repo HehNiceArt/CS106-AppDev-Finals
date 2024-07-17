@@ -41,7 +41,8 @@ public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop);
 
-        nyankoAI = NyankoManager.getInstance(this);
+        //nyankoAI = NyankoManager.getInstance(this);
+        nyankoAI = NyankoManager.getExistingInstance();
         handler = new Handler();
         shop = new Shop(this);
 
@@ -96,6 +97,7 @@ public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInte
         Intent intent = new Intent(ShopActivity.this, Gameplay.class);
         intent.putExtra("playerCoins", playerCoins);
         intent.putExtra("PET_NAME", petName);
+        //NyankoManager.releaseInstance();
         startActivity(intent);
     }
 

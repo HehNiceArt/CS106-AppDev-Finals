@@ -4,12 +4,19 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.media.Image;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.example.nyanyanko.Inventory.InventoryItem;
 import com.example.nyanyanko.ShopAct.CoinManager;
 import com.example.nyanyanko.Toy.ToyItem;
@@ -17,6 +24,7 @@ import com.example.nyanyanko.Toy.ToyItem;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import android.os.Handler;
 
 public class NyankoAI{
 
@@ -75,8 +83,12 @@ public class NyankoAI{
 
     private long lastIncomeTime;
     private final long INCOME_COOLDOWN = 5000;
+    private Bitmap walkingBitmap, idleBitmap;
+    public boolean isWalking;
+    public boolean isIdle;
+    private Handler mainHandler = new Handler(Looper.getMainLooper());
 
-    public NyankoAI(Context context, Bitmap bitmap, int screenWidth, int screenHeight) {
+    public NyankoAI(Context context, Bitmap bitmap, int screenWidth, int screenHeight, ImageView imageView) {
         this.mcontext = context;
         this.bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         this.x = screenWidth;
@@ -89,6 +101,7 @@ public class NyankoAI{
         this.speedY = DEFAULT_SPEED;
 
         this.random = new Random();
+        this.imageView = imageView;
 
         this.currentState = State.WALKING;
         this.lastStateChangeTime = System.currentTimeMillis();
@@ -100,6 +113,29 @@ public class NyankoAI{
         this.inventory = new ArrayList<>();
         this.toy = new ArrayList<>();
         this.lastIncomeTime = 0;
+
+        this.walkingBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.walking_default_right), 240, 240, false);
+        this.idleBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.nyanko_sit), 240, 240, false);
+        if(isWalking){
+            setGif(R.drawable.walking_default_right);
+        }else if(isIdle){
+           setGif(R.drawable.nyanko_sit);
+        }
+        if(this.imageView != null){
+            this.imageView.setImageBitmap(this.bitmap);
+            Log.d(TAG, "gif is not null");
+        }
+    }
+    ImageView imageView;
+    private void setGif(final int gifResource){
+        mainHandler.post(new Runnable(){
+            @Override
+            public void run(){
+                if(imageView != null){
+                    Glide.with(mcontext).asGif().load(gifResource).override(bitmap.getWidth(), bitmap.getHeight()).into(imageView);
+                }
+            }
+        });
     }
 
     public void update() {
@@ -191,14 +227,27 @@ public class NyankoAI{
     //region Behavior trees
     private void switchState() {
         if (currentState == State.WALKING) {
+            isIdle = true;
+            isWalking = false;
+            setGif(R.drawable.nyanko_sit);
             currentState = State.IDLE;
         } else if (currentState == State.IDLE) {
             currentState = State.WALKING;
+            isIdle = false;
+            isWalking = true;
+            setGif(R.drawable.walking_default_right);
             changeWalkingDirection();
         } else if (currentState == State.PLAYFUL) {
             currentState = previousState == State.IDLE ? State.PLAYFUL : State.WALKING;
             if (currentState == State.WALKING) {
+                isWalking = true;
+                isIdle = false;
+                setGif(R.drawable.walking_default_right);
                 changeWalkingDirection();
+            }else {
+                isWalking = false;
+                isIdle = true;
+                setGif(R.drawable.nyanko_sit);
             }
         }
     }
@@ -215,9 +264,11 @@ public class NyankoAI{
 
         if (x <= 0 || x + bitmap.getWidth() >= screenWidth) {
             speedX = -speedX;
+            setGif(speedX < 0 ? R.drawable.walking_default_left : R.drawable.walking_default_right);
         }
         if (y <= 0 || y + bitmap.getHeight() >= screenHeight) {
             speedY = -speedY;
+            setGif(speedX < 0 ? R.drawable.walking_default_left : R.drawable.walking_default_right);
         }
     }
 
@@ -279,8 +330,16 @@ public class NyankoAI{
         }
     }
     //endregion
-    public void draw(Canvas canvas) {
-        canvas.drawBitmap(bitmap, x, y, new Paint());
+    public void draw() {
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if(imageView != null){
+                    imageView.setY(y);;
+                    imageView.setX(x);
+                }
+            }
+        });
     }
     public void fillHunger(int hungerChange) {
         hunger += hungerChange;

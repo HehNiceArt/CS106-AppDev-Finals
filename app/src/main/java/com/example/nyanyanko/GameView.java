@@ -11,9 +11,11 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
 import com.example.nyanyanko.ShopAct.ShopActivity;
 
 import java.util.logging.Handler;
@@ -35,6 +37,8 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
     private String petName;
 
     public boolean isPaused;
+    Bitmap bit;
+    ImageView imageView;
     public GameView(Context context, String petName){
         super(context);
         surfaceHolder = getHolder();
@@ -49,21 +53,26 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
 
     @Override
     public void surfaceCreated(SurfaceHolder holder){
-        init();
         resume();
-    }
-    private void init(){
         screenWidth = getWidth();
         screenHeight = getHeight();
-
-        Bitmap nyankoBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.nyanko);
+    }
+    public void init(ImageView imageView){
         background = BitmapFactory.decodeResource(getResources(), R.drawable.gameviewbg);
-
-        gameplay = new Gameplay();
-        if(nyankoBitmap != null){
-            nyankoAI = NyankoManager.getInstance(getContext());
+        if(background != null){
+            Log.e(TAG, "load bg");
         }else{
-            Log.e(TAG, "cat is null!");
+            Log.d(TAG, "fail to loaded bg");
+        }
+        gameplay = new Gameplay();
+
+        this.imageView = imageView;
+
+        bit = BitmapFactory.decodeResource(getResources(), R.drawable.walking_default_right);
+        if(this.imageView != null){
+            Glide.with(this).asGif().load(R.drawable.walking_default_right).into(this.imageView);
+            Log.d("GameView", "NyankoAI calling NyankoManager");
+            nyankoAI = NyankoManager.getInstance(getContext(), bit, imageView);
         }
     }
     @Override
@@ -98,8 +107,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
         return true;
     }
     @Override
-    public void run()
-    {
+    public void run() {
         while(isPlaying) {
             while(!isPaused) {
                 update();
@@ -108,30 +116,27 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
             }
         }
     }
-    public void update()
-    {
+    public void update() {
         if(nyankoAI != null){
             nyankoAI.update();
-        }else {
-            Log.e(TAG, "NyankoAI is null in update()!");
         }
     }
     public void draw() {
-        if(surfaceHolder.getSurface().isValid())
-        {
+        if(surfaceHolder.getSurface().isValid()) {
             Canvas canvas = surfaceHolder.lockCanvas();
-            background = Bitmap.createScaledBitmap(background, screenWidth, screenHeight, false);
+            if(background != null){
+                background = Bitmap.createScaledBitmap(background, screenWidth, screenHeight, false);
                 canvas.drawBitmap(background, 0, 0, null);
+            }
             if(nyankoAI != null){
-                nyankoAI.draw(canvas);
+                nyankoAI.draw();
                 displayText(canvas);
             }else {
-                Log.e(TAG, "NyankoAI is null in draw()");
+               Log.e(TAG, "NyankoAI is null in draw");
             }
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
     }
-
     public void displayText(Canvas canvas){
         NyankoAI.Mood initialMood = nyankoAI.getMood();
 

@@ -40,7 +40,8 @@ public class ToyActivity extends Activity implements ToyAdapter.OnItemInteractio
         petName = getIntent().getStringExtra("PET_NAME");
 
         toyGridView = findViewById(R.id.toyGrid);
-        nyankoAI = NyankoManager.getInstance(this);
+        //nyankoAI = NyankoManager.getInstance(this);
+        nyankoAI = NyankoManager.getExistingInstance();
 
         CoinManager.getInstance().startCoinIncrement();
         Log.d("ToyActivity", "Starting coin increment in ToyActivity");
