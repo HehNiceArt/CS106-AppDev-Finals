@@ -21,10 +21,12 @@ public class Catmeow extends AppCompatActivity{
 
         // Initialize Handler to schedule periodic playback
         handler = new Handler();
-        startPeriodicSfx();
+       // startPeriodicSfx();
     }
 
-    private void startPeriodicSfx() {
+    //TODO every 8 sec, play meow
+    //Problem: Can't call on NyankoAI
+    public void startPeriodicSfx() {
         // Define the delay (in milliseconds) between each playback
         long delayMillis = 8000; // 8 seconds
 

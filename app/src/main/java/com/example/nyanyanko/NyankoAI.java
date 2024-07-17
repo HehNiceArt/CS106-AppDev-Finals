@@ -93,6 +93,7 @@ public class NyankoAI extends AppCompatActivity{
 
         this.speedX = DEFAULT_SPEED;
         this.speedY = DEFAULT_SPEED;
+        catmeow = new Catmeow();
 
         this.random = new Random();
 
@@ -109,7 +110,6 @@ public class NyankoAI extends AppCompatActivity{
     }
 
     public void update() {
-        catmeow;
         long currentTime = System.currentTimeMillis();
         long stateDuration = (currentState == State.WALKING) ? WALKING_DURATION : IDLE_DURATION;
         if (currentTime - lastStateChangeTime > stateDuration) {
@@ -122,6 +122,7 @@ public class NyankoAI extends AppCompatActivity{
             moveToTarget();
         }
 
+        catmeow.startPeriodicSfx();
         decreaseHunger(currentTime);
         checkHP();
         checkMood(currentTime);
