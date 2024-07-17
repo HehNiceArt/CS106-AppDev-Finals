@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,8 +42,7 @@ public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop);
 
-        Bitmap nyankoBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.nyanko);
-        nyankoAI = NyankoManager.getInstance(this);
+        nyankoAI = NyankoManager.getExistingInstance();
         handler = new Handler();
         shop = new Shop(this);
 

@@ -39,8 +39,7 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
         inventoryGridView= findViewById(R.id.inventoryGrid);
         petName = getIntent().getStringExtra("PET_NAME");
 
-        Bitmap nyankoBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.nyanko);
-        nyankoAI = NyankoManager.getInstance(this);
+        nyankoAI = NyankoManager.getExistingInstance();
         CoinManager.getInstance().startCoinIncrement();
         Log.d("InventoryActivity", "Starting coin increment in InventoryActivity");
 

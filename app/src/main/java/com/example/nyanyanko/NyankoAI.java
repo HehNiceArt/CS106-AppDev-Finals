@@ -52,9 +52,6 @@ public class NyankoAI{
 
     public int hunger = 10;
     public int hp = 10;
-    public int playerCoins = 20;
-
-    private ImageView  imageView;
 
     public enum Mood {
         DEFAULT("GOOD"),
@@ -78,8 +75,10 @@ public class NyankoAI{
 
     private long lastIncomeTime;
     private final long INCOME_COOLDOWN = 5000;
+    private ImageView imageView;
 
-    public NyankoAI(Context context, Bitmap bitmap, int screenWidth, int screenHeight) {
+    public NyankoAI(Context context, Bitmap bitmap, int screenWidth, int screenHeight, ImageView imageView) {
+        this.imageView = imageView;
         this.mcontext = context;
         this.bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
         this.x = screenWidth;
@@ -103,6 +102,13 @@ public class NyankoAI{
         this.inventory = new ArrayList<>();
         this.toy = new ArrayList<>();
         this.lastIncomeTime = 0;
+
+        if(this.imageView != null){
+            this.imageView.setImageBitmap(this.bitmap);
+            this.imageView.setX(x);
+            this.imageView.setY(y);
+            Log.d(TAG, "gif is not null");
+        }
     }
 
 
@@ -283,8 +289,17 @@ public class NyankoAI{
         }
     }
     //endregion
-    public void draw(Canvas canvas) {
-        canvas.drawBitmap(bitmap, x, y, new Paint());
+    public void draw() {
+        //canvas.drawBitmap(bitmap, x, y, new Paint());
+        ((Activity) mcontext).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(imageView != null) {
+                    imageView.setY(y);
+                    imageView.setX(x);
+                }
+            }
+        });
     }
     public void fillHunger(int hungerChange) {
         hunger += hungerChange;

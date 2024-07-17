@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.example.nyanyanko.Inventory.InventoryActivity;
 import com.example.nyanyanko.ShopAct.CoinManager;
@@ -20,12 +21,15 @@ public class Gameplay extends AppCompatActivity {
     private Button openInventoryBTN;
     private int playerCoins;
     String petName;
+    private NyankoAI nyankoAI;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gameplay);
         petName = getIntent().getStringExtra("PET_NAME");
+        gameView = new GameView(this, petName);
 
+        ImageView imageView = findViewById(R.id.imageHolder);
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("playerCoins")) {
             playerCoins = intent.getIntExtra("playerCoins", 20); // Default value is 20
@@ -35,8 +39,8 @@ public class Gameplay extends AppCompatActivity {
 
         incrementCoins();
 
+        gameView.init(imageView);
         FrameLayout frameLayout = findViewById(R.id.act_gameplay);
-        gameView = new GameView(this, petName);
         frameLayout.addView(gameView, 0);
 
         openInventoryBTN = findViewById(R.id.inventoryBTN);

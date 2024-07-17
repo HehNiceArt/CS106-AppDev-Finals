@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.nyanyanko.Gameplay;
@@ -41,7 +42,7 @@ public class ToyActivity extends Activity implements ToyAdapter.OnItemInteractio
 
         Bitmap nyankoBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.nyanko);
         toyGridView = findViewById(R.id.toyGrid);
-        nyankoAI = NyankoManager.getInstance(this);
+        nyankoAI = NyankoManager.getExistingInstance();
 
         CoinManager.getInstance().startCoinIncrement();
         Log.d("ToyActivity", "Starting coin increment in ToyActivity");

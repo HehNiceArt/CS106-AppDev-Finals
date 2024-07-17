@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".Gameplay">
 
+
     <FrameLayout
         android:layout_width="match_parent"
         android:id="@+id/act_gameplay"
@@ -73,6 +74,14 @@
                     android:onClick="handleShopBTNClick" />
                 </LinearLayout>
         </LinearLayout>
-
+        <!--<pl.droidsonroids.gif.GifImageView
+            android:layout_width="wrap_content"
+            android:src="@drawable/walking_default_right"
+            android:layout_height="wrap_content"/>
+-->
+        <ImageView
+            android:id="@+id/imageHolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </FrameLayout>
 </LinearLayout>
