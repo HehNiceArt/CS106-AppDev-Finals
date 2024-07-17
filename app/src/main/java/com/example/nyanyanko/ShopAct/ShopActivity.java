@@ -53,6 +53,7 @@ public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInte
         }
         shopGridView= findViewById(R.id.shopGrid);
 
+        nyankoAI = NyankoManager.getExistingInstance();
         coins = findViewById(R.id.coinID);
         playerCoins = CoinManager.getInstance().getCoins();
         Log.d("ShopAct", "PlayerCoins: " + playerCoins);

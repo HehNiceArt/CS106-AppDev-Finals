@@ -17,4 +17,7 @@ public class NyankoManager {
         }
         return nyankoAIInstance;
     }
+    public static NyankoAI getExistingInstance(){
+        return nyankoAIInstance;
+    }
 }

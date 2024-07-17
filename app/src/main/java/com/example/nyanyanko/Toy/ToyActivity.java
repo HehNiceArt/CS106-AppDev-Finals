@@ -43,6 +43,7 @@ public class ToyActivity extends Activity implements ToyAdapter.OnItemInteractio
         Bitmap nyankoBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.nyanko);
         toyGridView = findViewById(R.id.toyGrid);
 
+        nyankoAI = NyankoManager.getExistingInstance();
         CoinManager.getInstance().startCoinIncrement();
         Log.d("ToyActivity", "Starting coin increment in ToyActivity");
 
