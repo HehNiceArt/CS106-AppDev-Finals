@@ -39,9 +39,9 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
         inventoryGridView= findViewById(R.id.inventoryGrid);
         petName = getIntent().getStringExtra("PET_NAME");
 
-        //nyankoAI = NyankoManager.getInstance(this);
         nyankoAI = NyankoManager.getExistingInstance();
         CoinManager.getInstance().startCoinIncrement();
+
         Log.d("InventoryActivity", "Starting coin increment in InventoryActivity");
 
         updateInventory();
@@ -57,6 +57,8 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
     private void goBack(){
         Intent intent = new Intent(InventoryActivity.this, Gameplay.class);
         intent.putExtra("PET_NAME", petName);
+        //NyankoManager.getExistingInstance();
+        //NyankoManager.releaseInstance();
         startActivity(intent);
     }
     private void updateInventory(){
@@ -67,7 +69,7 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
     @Override
     public void onItemClick(InventoryItem item){
         int currentQuantity = item.getQuantity();
-        eating = BitmapFactory.decodeResource(getResources(), R.drawable.nyanko);
+        eating = BitmapFactory.decodeResource(getResources(), R.drawable.splash_eating);
         int hungerVal = item.getHunger();
         int hpVal = item.getHp();
         Log.d("Inventory", item.getName() + ", hungerVal: " + hungerVal);

@@ -58,7 +58,7 @@ public class ToyActivity extends Activity implements ToyAdapter.OnItemInteractio
     @Override
     public void onItemClick(ToyItem item){
         int currentQuantity = item.getQuantity();
-        playing = BitmapFactory.decodeResource(getResources(), R.drawable.nyanko);
+        playing = BitmapFactory.decodeResource(getResources(), R.drawable.splash_playing);
         if(currentQuantity > 0){
             showImageDialog();
             item.setQuantity(currentQuantity - 1);
@@ -94,6 +94,7 @@ public class ToyActivity extends Activity implements ToyAdapter.OnItemInteractio
     private void goBack(){
         Intent intent = new Intent(ToyActivity.this, Gameplay.class);
         intent.putExtra("PET_NAME", petName);
+        //NyankoManager.releaseInstance();
         startActivity(intent);
     }
     private void updateToy(){
