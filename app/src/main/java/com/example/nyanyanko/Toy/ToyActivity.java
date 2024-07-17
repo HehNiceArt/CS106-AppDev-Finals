@@ -95,6 +95,7 @@ public class ToyActivity extends Activity implements ToyAdapter.OnItemInteractio
     private void goBack(){
         Intent intent = new Intent(ToyActivity.this, Gameplay.class);
         intent.putExtra("PET_NAME", petName);
+        NyankoManager.releaseInstance();
         startActivity(intent);
     }
     private void updateToy(){

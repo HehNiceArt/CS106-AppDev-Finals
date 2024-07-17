@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.example.nyanyanko.Inventory.InventoryItem;
 import com.example.nyanyanko.ShopAct.CoinManager;
 import com.example.nyanyanko.Toy.ToyItem;
@@ -113,18 +114,16 @@ public class NyankoAI{
         this.toy = new ArrayList<>();
         this.lastIncomeTime = 0;
 
-        walkingBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.walking_default_right), 240, 240, false);
-        idleBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.nyanko_sit), 240, 240, false);
+        this.walkingBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.walking_default_right), 240, 240, false);
+        this.idleBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.nyanko_sit), 240, 240, false);
 
         if(isWalking){
-           setGif(R.drawable.walking_default_right);
+            setGif(R.drawable.walking_default_right);
         }else if(isIdle){
-           setGif(R.drawable.nyanko_sit);
+            setGif(R.drawable.nyanko_sit);
         }
         if(this.imageView != null){
             this.imageView.setImageBitmap(this.bitmap);
-            this.imageView.setX(x);
-            this.imageView.setY(y);
             Log.d(TAG, "gif is not null");
         }
     }
@@ -134,13 +133,11 @@ public class NyankoAI{
             @Override
             public void run() {
                 if(imageView != null){
-                    Glide.with(mcontext).asGif().load(gifResource).diskCacheStrategy(DiskCacheStrategy.ALL).override(bitmap.getWidth(), bitmap.getHeight()).into(imageView);
+                    Glide.with(mcontext).asGif().load(gifResource).override(bitmap.getWidth(), bitmap.getHeight()).into(imageView);
                 }
             }
         });
     }
-
-
     public void update() {
         long currentTime = System.currentTimeMillis();
         long stateDuration = (currentState == State.WALKING) ? WALKING_DURATION : IDLE_DURATION;
@@ -232,8 +229,8 @@ public class NyankoAI{
         if (currentState == State.WALKING) {
             isIdle = true;
             isWalking = false;
-            setGif(R.drawable.nyanko_sit);
             currentState = State.IDLE;
+            setGif(R.drawable.nyanko_sit);
         } else if (currentState == State.IDLE) {
             isWalking = true;
             isIdle = false;
@@ -243,9 +240,13 @@ public class NyankoAI{
         } else if (currentState == State.PLAYFUL) {
             currentState = previousState == State.IDLE ? State.PLAYFUL : State.WALKING;
             if (currentState == State.WALKING) {
+                isWalking = true;
+                isIdle = false;
                 setGif(R.drawable.walking_default_right);
                 changeWalkingDirection();
             }else{
+                isWalking = false;
+                isIdle = true;
                 setGif(R.drawable.nyanko_sit);
             }
         }

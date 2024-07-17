@@ -48,8 +48,6 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
         surfaceCreated(surfaceHolder);
         surfaceHolder.addCallback(this);
 
-        bit = BitmapFactory.decodeResource(getResources(), R.drawable.walking_default_right);
-        nyankoAI = new NyankoAI(context, bit, 0, 0, imageView);
         setFocusable(true);
     }
     ImageView imageView;
@@ -66,9 +64,12 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
 
         this.imageView = imageView;
 
+        bit = BitmapFactory.decodeResource(getResources(), R.drawable.walking_default_right);
+
         if(this.imageView != null) {
             Glide.with(this).asGif().load(R.drawable.walking_default_right).into(this.imageView);
             nyankoAI = NyankoManager.getInstance(getContext(),bit,imageView);
+            Log.d("GameVIew", "NyankoAI calling nyankoManager!");
         }
     }
     @Override

@@ -69,7 +69,6 @@ public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInte
             public void onClick(View view){
                 goBack();
             }
-
         });
     }
 
@@ -97,9 +96,9 @@ public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInte
         Intent intent = new Intent(ShopActivity.this, Gameplay.class);
         intent.putExtra("playerCoins", playerCoins);
         intent.putExtra("PET_NAME", petName);
+        NyankoManager.releaseInstance();
         startActivity(intent);
     }
-
     private void itemBuy(ShopItem item){
         if(playerCoins >= item.getCost()){
             playerCoins = CoinManager.getInstance().decreaseCoins(item.getCost());

@@ -56,6 +56,7 @@ public class InventoryActivity extends Activity implements InventoryAdapter.OnIt
     private void goBack(){
         Intent intent = new Intent(InventoryActivity.this, Gameplay.class);
         intent.putExtra("PET_NAME", petName);
+        NyankoManager.releaseInstance();
         startActivity(intent);
     }
     private void updateInventory(){
