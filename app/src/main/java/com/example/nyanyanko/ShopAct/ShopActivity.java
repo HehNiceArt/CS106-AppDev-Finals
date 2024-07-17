@@ -1,6 +1,5 @@
 package com.example.nyanyanko.ShopAct;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -11,7 +10,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,7 +28,7 @@ import com.example.nyanyanko.Toy.ToyItem;
 
 import java.util.List;
 
-public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInteractionListener{
+public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInteractionListener {
     private Shop shop;
     private NyankoAI nyankoAI;
     private int playerCoins;
@@ -36,7 +38,6 @@ public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInte
     private List<ShopItem> shopItems;
     TextView coins;
     String petName;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,10 +73,10 @@ public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInte
             }
         });
     }
-
     @Override
     public void onItemClick(ShopItem item){
        itemBuy(item);
+       Log.d("ShopAct", "Item bought!");
     }
     private void updateShopItems(){
         shopItems = shop.getShopItems();

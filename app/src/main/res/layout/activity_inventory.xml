@@ -1,23 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="16dp"
     android:id="@+id/inventory_layout"
+    android:background="#F0F0F0"
     tools:context=".Inventory.InventoryActivity">
-    <ImageView
-        android:layout_width="match_parent"
-        android:src="@drawable/toy_bg"
-        android:scaleType="centerCrop"
-        android:layout_height="match_parent"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="10dp"
-        android:orientation="vertical">
 
         <Button
             android:id="@+id/returnBTN"
@@ -25,17 +16,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:text="BACK" />
+    <GridView
+        android:id="@+id/inventoryGrid"
+        android:layout_width="match_parent"
+        android:numColumns="auto_fit"
+        android:columnWidth="100dp"
+        android:horizontalSpacing="10dp"
+        android:verticalSpacing="10dp"
+        android:stretchMode="columnWidth"
+        android:gravity="center"
+        android:layout_height="match_parent" />
 
-        <GridView
-            android:id="@+id/inventoryGrid"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:columnWidth="100dp"
-            android:gravity="center"
-            android:horizontalSpacing="10dp"
-            android:numColumns="auto_fit"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="10dp" />
-    </LinearLayout>
-
-</FrameLayout>
+</LinearLayout>

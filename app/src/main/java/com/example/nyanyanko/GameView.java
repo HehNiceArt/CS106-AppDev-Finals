@@ -144,11 +144,11 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
         paint.setColor(Color.BLACK);
         paint.setTextSize(50);
         int _x = 20;
-        int _y = 100;
+        int _y = 200;
         canvas.drawText(petName +"", _x, _y, paint);
-        canvas.drawText("HP: " + nyankoAI.getHP() +"/10", _x, _y + 100, paint);
-        canvas.drawText("Hunger: " + nyankoAI.getHunger() +"/10", _x, _y + 150, paint);
-        canvas.drawText("Mood: " + initialMood.getMoodString(),_x, _y + 200, paint);
+        canvas.drawText("HP: " + nyankoAI.getHP() +"/10", _x, _y + 50, paint);
+        canvas.drawText("Hunger: " + nyankoAI.getHunger() +"/10", _x, _y + 100, paint);
+        canvas.drawText("Mood: " + initialMood.getMoodString(),_x, _y + 150, paint);
     }
     private void control() {
         try{
