@@ -3,6 +3,8 @@ package com.example.nyanyanko.SFX;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nyanyanko.R;
@@ -14,20 +16,25 @@ public class Catmeow extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_gameplay);
 
-        // Initialize MediaPlayer with the sound file
         sfxPlayer = MediaPlayer.create(this, R.raw.catmeow1);
+        // Initialize MediaPlayer with the sound file
+        if(handler == null){
+            Log.d("Catmeow", "Handler initialized Failed");
+        }else{
+            Log.e("Catmeow", "Handler initialization success");
+        }
 
         // Initialize Handler to schedule periodic playback
-        handler = new Handler();
-       // startPeriodicSfx();
+        startPeriodicSfx();
     }
 
     //TODO every 8 sec, play meow
     //Problem: Can't call on NyankoAI
     public void startPeriodicSfx() {
         // Define the delay (in milliseconds) between each playback
+        handler = new Handler();
         long delayMillis = 8000; // 8 seconds
 
         // Runnable to play the SFX
@@ -44,7 +51,11 @@ public class Catmeow extends AppCompatActivity{
         };
 
         // Schedule the first playback immediately
-        handler.post(runnable);
+        if(handler != null){
+            handler.post(runnable);
+        }else{
+            Log.d("catmeow", "handler null");
+        }
     }
 
     @Override

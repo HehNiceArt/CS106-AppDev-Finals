@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.example.nyanyanko.Inventory.InventoryActivity;
+import com.example.nyanyanko.SFX.Catmeow;
 import com.example.nyanyanko.ShopAct.CoinManager;
 import com.example.nyanyanko.ShopAct.ShopActivity;
 import com.example.nyanyanko.Toy.ToyActivity;
@@ -19,6 +20,7 @@ public class Gameplay extends AppCompatActivity {
     private GameView gameView;
     private Button openInventoryBTN;
     private int playerCoins;
+    private Catmeow catmeow;
     String petName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

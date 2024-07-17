@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.example.nyanyanko.Inventory.InventoryItem;
 import com.example.nyanyanko.SFX.Catmeow;
+import com.example.nyanyanko.SFX.NyankoSFX;
 import com.example.nyanyanko.ShopAct.CoinManager;
 import com.example.nyanyanko.Toy.ToyItem;
 
@@ -57,7 +58,6 @@ public class NyankoAI extends AppCompatActivity{
     public int playerCoins = 20;
     private MusicService musicService;
 
-    private Catmeow catmeow = new Catmeow();
 
     public enum Mood {
         DEFAULT("GOOD"),
@@ -81,6 +81,7 @@ public class NyankoAI extends AppCompatActivity{
 
     private long lastIncomeTime;
     private final long INCOME_COOLDOWN = 5000;
+    private Catmeow nyankoSFX;
 
     public NyankoAI(Context context, Bitmap bitmap, int screenWidth, int screenHeight) {
         this.mcontext = context;
@@ -93,7 +94,8 @@ public class NyankoAI extends AppCompatActivity{
 
         this.speedX = DEFAULT_SPEED;
         this.speedY = DEFAULT_SPEED;
-        catmeow = new Catmeow();
+
+        nyankoSFX = new Catmeow();
 
         this.random = new Random();
 
@@ -122,7 +124,6 @@ public class NyankoAI extends AppCompatActivity{
             moveToTarget();
         }
 
-        catmeow.startPeriodicSfx();
         decreaseHunger(currentTime);
         checkHP();
         checkMood(currentTime);
@@ -281,6 +282,7 @@ public class NyankoAI extends AppCompatActivity{
         if(currentTime - lastIncomeTime >= INCOME_COOLDOWN){
 
             CoinManager.getInstance().toySum(3);
+            nyankoSFX.startPeriodicSfx();
             Log.d(TAG, "Income bonus!");
             lastIncomeTime = currentTime;
 
