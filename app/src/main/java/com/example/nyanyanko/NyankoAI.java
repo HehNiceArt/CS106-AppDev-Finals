@@ -1,5 +1,7 @@
 package com.example.nyanyanko;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
@@ -11,6 +13,7 @@ import android.util.Log;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.nyanyanko.Inventory.InventoryItem;
+import com.example.nyanyanko.SFX.Catmeow;
 import com.example.nyanyanko.ShopAct.CoinManager;
 import com.example.nyanyanko.Toy.ToyItem;
 
@@ -18,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class NyankoAI{
+public class NyankoAI extends AppCompatActivity{
 
 
     private Gameplay gameplay;
@@ -52,6 +55,9 @@ public class NyankoAI{
     public int hunger = 10;
     public int hp = 10;
     public int playerCoins = 20;
+    private MusicService musicService;
+
+    private Catmeow catmeow = new Catmeow();
 
     public enum Mood {
         DEFAULT("GOOD"),
@@ -103,6 +109,7 @@ public class NyankoAI{
     }
 
     public void update() {
+        catmeow;
         long currentTime = System.currentTimeMillis();
         long stateDuration = (currentState == State.WALKING) ? WALKING_DURATION : IDLE_DURATION;
         if (currentTime - lastStateChangeTime > stateDuration) {
@@ -271,9 +278,11 @@ public class NyankoAI{
     public void incomeBonus(){
         long currentTime = System.currentTimeMillis();
         if(currentTime - lastIncomeTime >= INCOME_COOLDOWN){
+
             CoinManager.getInstance().toySum(3);
             Log.d(TAG, "Income bonus!");
             lastIncomeTime = currentTime;
+
         }else{
             Log.d(TAG, "Income bonus on cooldown");
         }
