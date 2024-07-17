@@ -39,6 +39,7 @@ public class ToyActivity extends Activity implements ToyAdapter.OnItemInteractio
 
         petName = getIntent().getStringExtra("PET_NAME");
 
+        Bitmap nyankoBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.nyanko);
         toyGridView = findViewById(R.id.toyGrid);
         nyankoAI = NyankoManager.getInstance(this);
 
@@ -57,7 +58,7 @@ public class ToyActivity extends Activity implements ToyAdapter.OnItemInteractio
     @Override
     public void onItemClick(ToyItem item){
         int currentQuantity = item.getQuantity();
-        playing = BitmapFactory.decodeResource(getResources(), R.drawable.nyanko);
+        playing = BitmapFactory.decodeResource(getResources(), R.drawable.splash_playing);
         if(currentQuantity > 0){
             showImageDialog();
             item.setQuantity(currentQuantity - 1);

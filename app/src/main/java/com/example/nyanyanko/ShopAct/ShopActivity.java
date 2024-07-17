@@ -41,6 +41,7 @@ public class ShopActivity extends Activity implements ShopItemAdapter.OnItemInte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop);
 
+        Bitmap nyankoBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.nyanko);
         nyankoAI = NyankoManager.getInstance(this);
         handler = new Handler();
         shop = new Shop(this);

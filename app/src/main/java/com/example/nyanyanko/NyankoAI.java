@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -52,6 +53,8 @@ public class NyankoAI{
     public int hunger = 10;
     public int hp = 10;
     public int playerCoins = 20;
+
+    private ImageView  imageView;
 
     public enum Mood {
         DEFAULT("GOOD"),
@@ -101,6 +104,7 @@ public class NyankoAI{
         this.toy = new ArrayList<>();
         this.lastIncomeTime = 0;
     }
+
 
     public void update() {
         long currentTime = System.currentTimeMillis();
