@@ -36,7 +36,6 @@ public class Gameplay extends AppCompatActivity {
         } else {
             playerCoins = 20; // Default value if Intent does not contain playerCoins
         }
-
         incrementCoins();
 
         gameView.init(imageView);

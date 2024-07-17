@@ -4,13 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.nyanyanko.Inventory.InventoryItem;
 import com.example.nyanyanko.ShopAct.CoinManager;
 import com.example.nyanyanko.Toy.ToyItem;
@@ -18,6 +22,7 @@ import com.example.nyanyanko.Toy.ToyItem;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import android.os.Handler;
 
 public class NyankoAI{
 
@@ -39,6 +44,8 @@ public class NyankoAI{
     private long statePauseTime;
     private boolean isStatePaused;
 
+    public boolean isIdle ;
+    public boolean isWalking ;
     private int targetX, targetY;
 
     private enum State {
@@ -72,15 +79,18 @@ public class NyankoAI{
     private List<InventoryItem> inventory;
     private List<ToyItem> toy;
     Context mcontext;
+    private Handler mainHandler = new Handler(Looper.getMainLooper());
 
     private long lastIncomeTime;
     private final long INCOME_COOLDOWN = 5000;
     private ImageView imageView;
+    private Bitmap walkingBitmap;
+    private Bitmap idleBitmap;
 
     public NyankoAI(Context context, Bitmap bitmap, int screenWidth, int screenHeight, ImageView imageView) {
         this.imageView = imageView;
         this.mcontext = context;
-        this.bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        this.bitmap = Bitmap.createScaledBitmap(bitmap, 240, 240, false);
         this.x = screenWidth;
         this.y = screenHeight;
 
@@ -103,12 +113,31 @@ public class NyankoAI{
         this.toy = new ArrayList<>();
         this.lastIncomeTime = 0;
 
+        walkingBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.walking_default_right), 240, 240, false);
+        idleBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.nyanko_sit), 240, 240, false);
+
+        if(isWalking){
+           setGif(R.drawable.walking_default_right);
+        }else if(isIdle){
+           setGif(R.drawable.nyanko_sit);
+        }
         if(this.imageView != null){
             this.imageView.setImageBitmap(this.bitmap);
             this.imageView.setX(x);
             this.imageView.setY(y);
             Log.d(TAG, "gif is not null");
         }
+    }
+
+    private void setGif(final int gifResource) {
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if(imageView != null){
+                    Glide.with(mcontext).asGif().load(gifResource).diskCacheStrategy(DiskCacheStrategy.ALL).override(bitmap.getWidth(), bitmap.getHeight()).into(imageView);
+                }
+            }
+        });
     }
 
 
@@ -201,14 +230,23 @@ public class NyankoAI{
     //region Behavior trees
     private void switchState() {
         if (currentState == State.WALKING) {
+            isIdle = true;
+            isWalking = false;
+            setGif(R.drawable.nyanko_sit);
             currentState = State.IDLE;
         } else if (currentState == State.IDLE) {
+            isWalking = true;
+            isIdle = false;
             currentState = State.WALKING;
+            setGif(R.drawable.walking_default_right);
             changeWalkingDirection();
         } else if (currentState == State.PLAYFUL) {
             currentState = previousState == State.IDLE ? State.PLAYFUL : State.WALKING;
             if (currentState == State.WALKING) {
+                setGif(R.drawable.walking_default_right);
                 changeWalkingDirection();
+            }else{
+                setGif(R.drawable.nyanko_sit);
             }
         }
     }
@@ -290,8 +328,7 @@ public class NyankoAI{
     }
     //endregion
     public void draw() {
-        //canvas.drawBitmap(bitmap, x, y, new Paint());
-        ((Activity) mcontext).runOnUiThread(new Runnable() {
+        mainHandler.post(new Runnable() {
             @Override
             public void run() {
                 if(imageView != null) {
@@ -339,6 +376,12 @@ public class NyankoAI{
     }
     public int getHP() {
         return hp;
+    }
+    public boolean getWalking(){
+        return isWalking;
+    }
+    public boolean getIdle(){
+        return isIdle;
     }
 
     public Mood getMood() {

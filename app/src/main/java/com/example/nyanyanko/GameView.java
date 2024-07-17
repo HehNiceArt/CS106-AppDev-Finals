@@ -38,6 +38,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
     private String petName;
 
     public boolean isPaused;
+    Bitmap bit;
     public GameView(Context context, String petName){
         super(context);
         surfaceHolder = getHolder();
@@ -47,6 +48,8 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
         surfaceCreated(surfaceHolder);
         surfaceHolder.addCallback(this);
 
+        bit = BitmapFactory.decodeResource(getResources(), R.drawable.walking_default_right);
+        nyankoAI = new NyankoAI(context, bit, 0, 0, imageView);
         setFocusable(true);
     }
     ImageView imageView;
@@ -58,14 +61,14 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
         screenHeight = getHeight();
     }
     public void init(ImageView imageView){
-
         background = BitmapFactory.decodeResource(getResources(), R.drawable.gameviewbg);
         gameplay = new Gameplay();
-        if(imageView != null) {
-            //imageView = findViewById(R.id.nyankoHolder);
-            Glide.with(this).asGif().load(R.drawable.walking_default_right).into(imageView);
-            nyankoAI = NyankoManager.getInstance(getContext(), imageView);
-            Log.d(TAG, "imageView not null");
+
+        this.imageView = imageView;
+
+        if(this.imageView != null) {
+            Glide.with(this).asGif().load(R.drawable.walking_default_right).into(this.imageView);
+            nyankoAI = NyankoManager.getInstance(getContext(),bit,imageView);
         }
     }
     @Override
